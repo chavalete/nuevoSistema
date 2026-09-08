@@ -1,0 +1,86 @@
+#header ul.menu { 
+    display: block; 
+    list-style-type: none;
+    padding: 18px 0 0 0;
+}
+#header .menu li.seccion { 
+    line-height: 18px; 
+    font-size: 16px; 
+    position: relative; 
+    float: left; 
+    top: -16px;
+    height: 27px;
+    background-image:  url("../img/btn-bg.jpg");
+    padding-top: 8px;
+    border-right: 1pt solid #13AEF6;
+}
+#header .menu li.seccion:hover { 
+    background-image:  url("../img/btn-bg_over.jpg");
+    height: 27px;
+    top: -16px;
+    padding-top: 8px;
+}
+#header .menu li.seccion a { 
+    padding: 0px 20px; 
+    text-decoration:none; 
+    color: white;
+    cursor: default;
+}
+#header .menu li.seccion ul { 
+    display: none; 
+    position: absolute; 
+    padding: 0; 
+    list-style-type: none; 
+}
+#header .menu li.seccion ul li { 
+    width: 150px; /* Si se modifica este valor hay que modificar el resizer dentro del menu */
+    background: none repeat scroll 0 0 #4199C2;
+    border-top:none; 
+    padding: 10px 0 0 13px;
+    height: 30px;
+    color: white;
+    cursor: pointer;
+}
+#header .menu li.seccion ul li:first-child { 
+    margin-top: 10px;
+}
+#header .menu li.seccion ul li:hover { 
+    background-image:  url("../img/btn-bg_over.jpg");
+}
+#header .menu li.seccion span.arrow {
+    background-image:  url("../img/arrows-ffffff.png");
+    background-position: 0 -100px;
+    height: 10px;
+    width: 10px;    
+    float: right;
+    margin: 5px 9px 0 -10px
+}
+#header .menu li.seccion span.arrow.hover {
+    background-position: 10px -100px;
+}
+
+
+
+#header ul.menu li.seccion-menu-option{ 
+    line-height: 18px; 
+    font-size: 16px; 
+    position: relative; 
+    float: left; 
+    top: -16px;
+    height: 27px;
+    background-image:  url("../img/btn-bg.jpg");
+    padding-top: 8px;
+    border-right: 1pt solid #13AEF6;
+}
+#header ul.menu li.seccion-menu-option a { 
+    padding: 0px 20px; 
+    text-decoration:none; 
+    color: white;
+    cursor: pointer;
+}
+#header .menu li.seccion-menu-option:hover { 
+    background-image:  url("../img/btn-bg_over.jpg");
+    height: 27px;
+    top: -16px;
+    padding-top: 8px;
+}

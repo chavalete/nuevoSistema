@@ -1,0 +1,240 @@
+div#flix_content { 
+    width: 1160px; 
+    background: white;
+    padding: 1px 20px;
+}
+div#flix_grid {}
+div#flix_titulo {
+    color: #0D72B3;
+    font_size: 14pt;
+    font-weight: bold;
+    margin: 7px;
+}
+div#flix_botonera {
+    background: url(../img/bg-botonera.gif);
+    height: 28px;
+    border: 1px solid #CCCCCC;
+}
+div.logo_boton { margin-right: 5px; }
+span.texto_boton {
+    float: left;
+    font-family: Tahoma, Arial;
+    font-size: 13px;
+    display: inline;
+    height: 19px;
+}
+span.texto_boton.consultaStock_busqueda_avanzada,
+span.texto_boton.stockEnCustodia_busqueda_avanzada, 
+span.texto_boton.entradas_busqueda_avanzada, 
+span.texto_boton.entradas_reimprimir_codigo_de_trazabilidad,
+span.texto_boton.salidas_busqueda_avanzada,
+span.texto_boton.auditorStock_busqueda_avanzada,
+span.texto_boton.presentaciones_busqueda_avanzada,
+span.texto_boton.clientes_busqueda_avanzada,
+span.texto_boton.categorias_busqueda_avanzada,
+span.texto_boton.productos_busqueda_avanzada,
+span.texto_boton.marcas_busqueda_avanzada,
+span.texto_boton.medicos_busqueda_avanzada,
+span.texto_boton.pacientes_busqueda_avanzada,
+span.texto_boton.proveedores_busqueda_avanzada,
+span.texto_boton.almacenes_busqueda_avanzada,
+span.texto_boton.estanterias_busqueda_avanzada,
+span.texto_boton.sucursales_busqueda_avanzada,
+span.texto_boton.obrasSociales_busqueda_avanzada,
+span.texto_boton.transacciones_reproceso, 
+span.texto_boton.transacciones_busqueda_avanzada, 
+span.texto_boton.transaccionesAgrupadas_busqueda_avanzada, 
+span.texto_boton.pendientesDeConfirmacion_busqueda_avanzada, 
+span.texto_boton.bloqueador_busqueda_avanzada{
+    background: url(../img/busqueda.png) no-repeat;
+    padding-left: 30px;
+}
+span.texto_boton:hover {
+    color: #0067B0; 
+}
+.flix_boton {
+    margin: 4px 4px 4px 10px;
+    cursor: pointer;
+}
+table#grid-content {
+    width: 100%;
+    border: 1px solid #CCCCCC;
+}
+.grid-titulo {
+    /* background-color: #D6D6D6;*/
+    background-image: url(../img/bg-title-grid.gif);
+    height: 50px;
+    text-align: center;
+    font-family: Tahoma, Arial;    
+    font-weight: bold;
+    font-size: 11pt;
+}
+.grid-titulo.sorted { background: url(../img/sorted_title.gif) repeat-x; }
+.grid-datos {
+    font-family: Tahoma, Arial;    
+    text-align: center;
+    height: 40px;
+    font-size: 11pt;
+}
+.grid-datos:hover, .grid-datos.par:hover { background-color: #D9EBF5; }
+.grid-datos.par { background-color: #F0F0F0; }
+tr.grid-datos td.sorted-par{
+    background-color: #E3E3E3;
+}
+tr.grid-datos td.sorted-impar{
+    background-color: #F3F3F3;
+}
+div#flix-bottom {
+    background: url(../img/bg-paginador.gif);
+    border: 1px solid #CCCCCC;    
+    height: 24px;
+    padding: 4px 0 0 8px;    
+}
+div.flix-separator {     
+    border-left: 1px solid #CCCCCC;
+    border-right: 1px solid #FFFFFF;
+    float: left;
+    height: 22px;
+}
+div.flix-separator.top { margin: 0px 10px 0px 10px; }
+div.flix-separator.bottom { margin: 1px 10px 1px 10px; }
+div#show-per-page { float: left; }
+div#flix-paginador {
+    float: left;
+    font-family: Tahoma, Arial; 
+    font-size: 13px;
+}
+div#flix-paginador div.bottom-button {
+    width: 16px;
+    height: 16px;
+    float: left;
+    cursor: pointer;
+    margin-top: 3px;    
+}
+div#flix-paginador div.first { background: url(../img/first.gif) no-repeat; }
+div#flix-paginador div.prev { background: url(../img/prev.gif) no-repeat; }
+div#flix-paginador div.next { background: url(../img/next.gif) no-repeat; }
+div#flix-paginador div.last { background: url(../img/last.gif) no-repeat; }
+div#flix-paginador .opacity { opacity: 0.3; cursor: default; }
+div#flix-paginador .opacity { opacity: 0.3; cursor: default; }
+div#flix-paginador .opacity { opacity: 0.3; cursor: default; }
+div#flix-paginador .opacity { opacity: 0.3; cursor: default; }
+div#flix-actualizar { 
+    background: url(../img/load.png) no-repeat;
+    width: 16px;
+    height: 16px;
+    float: left;
+    margin-top: 3px;
+    cursor: pointer;
+}
+div#flix-grid-info {
+    font-family: Tahoma, Arial; 
+    font-size: 13px;
+    float: left;
+    margin-top: 2px;
+}
+div.herramienta {
+    height: 20px;
+    width: 20px;
+    float: left;
+    background-image: url(../img/herramientas.png);
+    margin: 0 3px;
+    cursor: pointer;
+}
+div.herramienta.cancelable, div.herramienta.cancelableBloqueador { background-position: 108px 0; }
+div.herramienta.editable { background-position: 90px 0; }
+div.herramienta.mostrador { background-position: 45px 0; }
+div.herramienta.mostradorEntradas { background-position: 45px 0; }
+div.herramienta.detallesEntradas, div.herramienta.detallesTransacciones { background-position: 150px 0; }
+div.herramienta.transacciones { background-position: 180px 0; }
+div.herramienta.enviarTransaccion { background-position: 28px 0; }
+div.herramienta.autogestion { background-position: 46px 0; }
+div.herramienta.imprimir, div.herramienta.imprimirRemito, div.herramienta.imprimirCodigo { background-position: 221px 0; }
+div#loading_container {
+    position: fixed; 
+    z-index: 1000000; 
+    top:0px; 
+    left:0px; 
+    height: 100%; 
+    width: 1024px;
+    padding: 130px 0 0 345px;
+    display: none;
+}
+div.showData { display: block; }
+input.editData, select.editData { display: none; }
+td.herramientas { width: 180px; }
+div.herramientasEdit { display: none; }
+div.herramientasGeneral { display: block; }
+div.editTool {
+    background-image: url("../img/herramientas.png");
+    cursor: pointer;
+    float: left;
+    height: 20px;
+    margin: 0 2px;
+    width: 20px;    
+}
+div.editTool.acept { background-position: 129px 0; }
+div.editTool.cancel { background-position: 108px 0; }
+div.editTool-loading {
+    float: left;
+    margin: -3px 2px;
+    width: 30px;    
+    height: 28px;
+    display: none;
+}
+div.fieldSorter {
+    width: 100%; 
+    height: 10px; 
+    background-color: #D6D6D6;
+}
+div.fieldSorter div.asc{
+    background-image: url("../img/UI/ui-icons_888888_256x240.png");
+    width: 7px;
+    height: 7px;
+    background-position: -69px -20px;
+    float: right;
+    cursor: pointer;
+}
+div.fieldSorter div.desc{
+    background-image: url("../img/UI/ui-icons_888888_256x240.png");
+    width: 7px;
+    height: 7px;
+    background-position: -4px -20px;
+    float: left;
+    cursor: pointer;
+}
+div.fieldSorter div.asc-hover{
+    background-image: url("../img/UI/ui-icons_2e83ff_256x240.png");
+    width: 7px;
+    height: 7px;
+    background-position: -69px -20px;
+    float: right;
+    cursor: pointer;
+}
+div.fieldSorter div.desc-hover{
+    background-image: url("../img/UI/ui-icons_2e83ff_256x240.png");
+    width: 7px;
+    height: 7px;
+    background-position: -4px -20px;
+    float: left;
+    cursor: pointer;
+}
+div.fieldSorter div.fieldSorter-asc{
+    width: 45%; 
+    float: left;
+}
+div.fieldSorter div.fieldSorter-separator{
+    width: 10%; 
+    float: left; 
+    height: 7px;
+}
+div.fieldSorter div.fieldSorter-desc{
+    width: 45%; 
+    float: left;
+}
+div.fieldSorter div.asc:hover {
+    background-image: url("../img/UI/ui-icons_2e83ff_256x240.png");
+}
+div.fieldSorter div.desc:hover{
+    background-image: url("../img/UI/ui-icons_2e83ff_256x240.png");
+}

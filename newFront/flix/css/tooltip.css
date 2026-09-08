@@ -1,0 +1,55 @@
+.tooltip{ 
+    /*position: absolute; */
+}
+.tooltip-position{ 
+    position: absolute; 
+    float: right;
+    top: 13px;
+    right: 35px;
+}
+.tooltip-click{
+    width: 25px; 
+    height: 25px;
+}
+.tooltip-content{
+    width: 400px; 
+    height: auto;; 
+    background-color: #EFFFFF; 
+    display: none; 
+    box-shadow: 10px 10px 7px #888; 
+    border: 1px solid gray; 
+    border-radius: 3px; 
+    position: absolute; 
+    padding: 13px 13px 25px 13px;
+    overflow: auto;
+    z-index: 10000;
+}
+.tooltip-content p {
+    text-align: justify;
+}
+div.icono-tooltip{
+    height: 20px;
+    width: 20px;
+    background-image: url(../img/herramientas.png);
+    position: absolute;
+}
+div.tooltip-content h3, div.tooltip-content b{
+    color: #0D72B3;
+} 
+div.icono-tooltip.tooltip-cancelar { background-position: 108px 0; }
+div.tooltip-title {
+    background-color: lightslategray;
+    border: 1px solid #AAAAAA;
+    border-radius: 4px 4px 4px 4px;
+    color: #FFFFFF;
+    font-size: 12pt;
+    font-weight: bold;
+    height: 30px;
+    margin-bottom: 13px;
+    padding: 10px 0 0 10px;
+}
+div.tooltip-text{
+    font-weight: normal; 
+    color: black; 
+    font-size: 13px;
+}

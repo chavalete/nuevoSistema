@@ -1,0 +1,17 @@
+[dmelmac]
+driver = pgsql
+host = localhost
+port = 5432
+dbname = informacion
+;schema = db_schema
+username = gordon
+password = gordon
+
+[scienza]
+driver = pgsql
+host = 192.168.1.3
+port = 5432
+dbname = main_data
+;schema = db_schema
+username = alf
+password = nohayproblemaviejo

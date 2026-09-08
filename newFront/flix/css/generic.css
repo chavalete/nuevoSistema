@@ -1,0 +1,97 @@
+* { margin: auto; }
+body { 
+    background: #1fc768 url("../img/bg-body.jpg") repeat-x;  
+    margin: auto; 
+    padding: 0; 
+}
+#header { 
+    width:1200px; 
+    height: 125px; 
+    background-color:#ffffff; 
+}
+#header .arriba { 
+    height: 70px; 
+}
+#header .arriba #logo { 
+    padding:25px; 
+}
+#header .arriba #barra-busqueda { 
+    margin-top: -70px; 
+}
+#header abajo { 
+    height: 30px; 
+}
+#header .logout-contenedor { 
+    color: #FFFFFF; 
+    float: right; 
+    font-size: 10pt; 
+    line-height: 25px; 
+    margin-top: -10px;
+}
+#header .logout-usuario { 
+    margin-right:10px; 
+}
+#header div.abajo div#contenedor-botonera div.logout-contenedor a.logout img { 
+    margin-right:20px; 
+}
+#header .arriba #barra-busqueda input#valor { 
+    background-color: #86B8D9; 
+    border: 1pt solid #0D72B3; 
+    color: #FFFFFF; 
+    height: 18px; 
+    margin: 0 5px; 
+    padding: 0 2px 4px; 
+}
+#header .arriba #barra-busqueda select#tipo { 
+    background-color: #86B8D9; 
+    border: 1pt solid #0D72B3; 
+    color: #FFFFFF; 
+    margin: 10px 5px; 
+    padding: 1px 3px 1px 2px; 
+}
+#header .arriba #barra-busqueda select option { padding: 2px 17px 0px 2px;  }
+#header .arriba #barra-busqueda label { 
+    font-size: 11pt; 
+    font-variant: small-caps; 
+    font-weight: bold; 
+}
+#header .arriba #barra-busqueda.flotar-derecha input#buscar.buscar-btn { 
+    background: url("../img/buscar-btn.png") repeat scroll 0px -1px transparent; 
+    border: medium none; 
+    color: #FFFFFF; 
+    font-size: 11pt; 
+    height: 28px; 
+    margin-right: 20px; 
+    padding: 0; 
+    width: 140px; 
+    position: relative; 
+    top: 3px; 
+}
+#header .arriba #barra-busqueda.flotar-derecha input#buscar.buscar-btn:hover{ 
+    background: url("../img/buscar-btn.png") repeat scroll 0px -29px transparent; 
+}
+#header .flotar-derecha { float: right; }
+#header #contenedor-botonera { 
+    background-image: url("../img/bg-botonera.jpg"); 
+    background-position: 0; background-repeat: repeat-x; 
+    height: 38px; 
+}
+
+#main { 
+    font-family: Arial; 
+    margin: auto; 
+    padding: 0; 
+}
+
+#footer { 
+    height: 55px; 
+    width: 1200px; 
+    background-color: #ffffff; 
+    background-image: url("../img/bg-linea-inferior.jpg"); 
+    background-repeat: repeat-x; 
+    background-position: 10px 22px; 
+}
+#footer .desarrollo-por { 
+    float: right; 
+    padding: 10px; 
+}

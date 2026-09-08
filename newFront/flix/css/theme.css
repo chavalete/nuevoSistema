@@ -1,0 +1,408 @@
+/* ==========================================================================
+   Tema visual — rediseño 2025 (azul y blanco, modo oscuro)
+   Este archivo se carga DESPUÉS de todos los CSS existentes (ver cfg/config.ini
+   y login.php) y solo cambia apariencia: colores, tipografía, layout.
+   No modifica nombres de clases/IDs de los que dependen los .js existentes.
+   ========================================================================== */
+
+:root{
+    --bg:            #10161D;
+    --surface:        #17212B;
+    --surface-2:      #1E2A36;
+    --border:         #2A3946;
+    --text:           #E7EDF3;
+    --text-muted:     #8FA1B3;
+    --accent:         #4FA3E3;
+    --accent-strong:  #2E86C7;
+    --accent-contrast:#0B1620;
+    --accent-soft:    #1B3247;
+    --success:        #3FBE83;
+    --success-soft:   #163826;
+    --warning:        #E3A63F;
+    --warning-soft:   #3A2C10;
+    --critical:       #F16B5D;
+    --critical-soft:  #3B1712;
+    --brand-strip-bg: #FFFFFF;
+    --sidebar-w:      252px;
+    --shadow: 0 6px 24px -8px rgba(0,0,0,.45);
+}
+
+/* ---------- base ---------- */
+body{
+    background: var(--bg) !important;
+    color: var(--text);
+    font-family: 'Public Sans', 'Segoe UI', Tahoma, Arial, sans-serif;
+}
+#main{
+    width: 100% !important;
+    min-height: 100vh;
+    margin: 0 !important;
+    display: flex;
+    align-items: stretch;
+    font-family: 'Public Sans', 'Segoe UI', Tahoma, Arial, sans-serif;
+}
+#main.sidebar-collapsed #header{ width: 0; min-width: 0; border-right: none; overflow: hidden; }
+
+/* ================= SIDEBAR (#header) ================= */
+#header{
+    flex: none;
+    width: var(--sidebar-w);
+    height: auto;
+    margin: 0 !important;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Columna de contenido (topbar + grilla), envuelve ambos desde header.php hasta footer.php */
+#content-col{
+    flex: 1;
+    min-width: 0;
+    margin: 0 !important;
+    display: flex;
+    flex-direction: column;
+}
+
+#header .arriba{ height: auto; background: var(--brand-strip-bg); padding: 18px 16px; }
+#header .arriba #logo{ padding: 0; display: flex; align-items: center; gap: .5rem; }
+#header .arriba #logo span{ font-family: 'Archivo', Arial, sans-serif; font-weight: 700; color: #17212B; font-size: .95rem; }
+#header .arriba #barra-busqueda{ display: none; } /* búsqueda superior retirada del diseño */
+
+#header .abajo{ height: auto; padding: 10px 0 16px; }
+#header #contenedor-botonera{ background: none; height: auto; }
+
+/* Menú principal: de horizontal (float) a vertical
+   (usamos !important en color/background: el menú original tiene reglas
+   como "#header ul.menu li.seccion-menu-option" con más especificidad
+   que "#header .menu li.seccion-menu-option", y necesitamos ganarles siempre) */
+#header ul.menu{ display: block; padding: 4px 8px !important; margin: 0 !important; list-style: none; }
+#header .menu li.seccion,
+#header ul.menu li.seccion-menu-option{
+    float: none !important;
+    position: relative;
+    top: auto !important;
+    height: auto !important;
+    background-image: none !important;
+    background: none !important;
+    border-right: none !important;
+    padding: 0 !important;
+    margin: 0 0 1px !important;
+}
+#header .menu li.seccion:hover,
+#header ul.menu li.seccion-menu-option:hover{
+    background-image: none !important;
+    background: none !important;
+    height: auto !important;
+    top: auto !important;
+    padding-top: 0 !important;
+}
+#header .menu li.seccion a,
+#header ul.menu li.seccion-menu-option a{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    padding: .55rem .7rem !important;
+    margin: 0 4px !important;
+    border-radius: 8px;
+    color: var(--text) !important;
+    font-size: .85rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+}
+#header .menu li.seccion:hover > a,
+#header ul.menu li.seccion-menu-option:hover > a{
+    background: var(--accent-soft) !important;
+    color: var(--accent) !important;
+}
+#header .menu li.seccion span.arrow{
+    background-image: none;
+    width: 8px; height: 8px;
+    margin: 0;
+    border-right: 1.5px solid var(--text-muted);
+    border-bottom: 1.5px solid var(--text-muted);
+    transform: rotate(-45deg);
+    float: none;
+}
+#header .menu li.seccion span.arrow.hover{ border-color: var(--accent); }
+
+#header .menu li.seccion ul{
+    display: none;
+    position: static !important;
+    width: auto !important;
+    padding: 2px 0 6px 12px !important;
+    margin: 0 !important;
+    list-style: none;
+}
+#header .menu li.seccion ul li{
+    width: auto !important;
+    background: none !important;
+    border-top: none !important;
+    padding: .42rem .7rem !important;
+    margin: 0 4px !important;
+    height: auto !important;
+    color: var(--text-muted) !important;
+    font-size: .8rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+#header .menu li.seccion ul li:first-child{ margin-top: 0 !important; }
+#header .menu li.seccion ul li:hover{
+    background-image: none !important;
+    background: var(--surface-2) !important;
+    color: var(--text) !important;
+}
+
+/* ================= TOPBAR (nuevo) ================= */
+#topbar{
+    flex: none;
+    margin: 0 !important;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: .65rem 1.5rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+}
+.hamburger{
+    width: 34px; height: 34px; flex: none;
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    border-radius: 7px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+}
+.hamburger span, .hamburger span::before, .hamburger span::after{
+    content: ''; display: block; width: 16px; height: 2px; background: var(--text);
+    position: relative;
+}
+.hamburger span::before{ top: -5px; }
+.hamburger span::after{ top: 3px; }
+
+#topbar .logout-contenedor{
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    float: none;
+    color: var(--text);
+}
+#topbar .logout-usuario{
+    margin: 0;
+    float: none;
+    font-size: .82rem;
+    color: var(--text);
+}
+#topbar a.logout{
+    float: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px; height: 34px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--surface-2);
+}
+#topbar a.logout img{ width: 18px; height: 18px; }
+
+/* ================= CONTENIDO ================= */
+div#flix_content{
+    flex: 1;
+    width: auto !important;
+    margin: 0 !important;
+    background: var(--bg);
+    padding: 1.5rem;
+}
+div#footer{ display: none; } /* el "desarrollado por" pasa a ocupar espacio de la grilla sin aportar valor visual en el shell nuevo */
+
+/* ================= TÍTULO Y BOTONERA DE SECCIÓN ================= */
+div#flix_titulo{
+    color: var(--text);
+    font-family: 'Archivo', Arial, sans-serif;
+    font-size: 1.15rem;
+    margin: 0 0 .9rem;
+}
+div#flix_botonera{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    height: auto;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.flix_boton{
+    margin: 3px;
+    padding: .4rem .75rem;
+    border-radius: 6px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+}
+.flix_boton:hover{ border-color: var(--accent); }
+span.texto_boton{
+    font-family: 'Public Sans', Arial, sans-serif;
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--text);
+    background-image: none !important;
+    padding-left: 0 !important;
+}
+span.texto_boton:hover{ color: var(--accent); }
+div.flix-separator{ border-left: 1px solid var(--border); border-right: none; margin: 0 6px !important; }
+div#globalTools{ display: flex; align-items: center; }
+
+/* ================= GRILLA / LISTADOS (genérico: aplica a todos los módulos) ================= */
+table#grid-content{
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    border-collapse: separate;
+    border-spacing: 0;
+    box-shadow: var(--shadow);
+}
+.grid-titulo{
+    background: var(--surface-2) !important;
+    background-image: none !important;
+    height: auto;
+    padding: .65rem .5rem;
+    text-align: left;
+    font-family: 'Public Sans', Arial, sans-serif;
+    font-weight: 700;
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+}
+.grid-titulo.sorted{ background: var(--surface-2) !important; color: var(--accent); }
+.grid-datos{
+    font-family: 'Public Sans', Arial, sans-serif;
+    text-align: left;
+    height: auto;
+    font-size: .85rem;
+    color: var(--text);
+    background: var(--surface);
+}
+.grid-datos td{ padding: .6rem .5rem; border-bottom: 1px solid var(--border); }
+.grid-datos:hover, .grid-datos.par:hover{ background-color: var(--surface-2) !important; }
+.grid-datos.par{ background-color: var(--surface) !important; }
+tr.grid-datos td.sorted-par, tr.grid-datos td.sorted-impar{ background-color: var(--surface-2) !important; }
+div.fieldSorter{ background-color: transparent; }
+
+div#flix-bottom{
+    background: var(--surface) !important;
+    background-image: none !important;
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    height: auto;
+    padding: 10px 14px;
+    color: var(--text-muted);
+    font-size: .8rem;
+}
+div#flix-paginador{ color: var(--text-muted); font-size: .8rem; }
+div#show-per-page select.perPage{
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+}
+#input_perPage{
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    text-align: center;
+}
+
+/* ================= LOGIN ================= */
+body:has(.login-cuadro){ background: var(--bg) !important; }
+.login-cuadro{
+    background-color: var(--surface) !important;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+}
+.login-cuadro .login-title{
+    font-family: 'Archivo', Arial, sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text);
+    text-align: center;
+    margin: 0 0 20px;
+}
+.form-login label{ color: var(--text-muted) !important; }
+.form-login input, .form-login select{
+    background: var(--surface-2) !important;
+    color: var(--text) !important;
+    border: 1px solid var(--border) !important;
+}
+.form-login input:focus, .form-login select:focus{
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px var(--accent-soft) !important;
+}
+.login-cuadro .login-contenedor form.form-login input.login-btn{
+    background: var(--accent) !important;
+    color: var(--accent-contrast) !important;
+}
+.login-cuadro .login-contenedor form.form-login input.login-btn:hover{
+    background: var(--accent-strong) !important;
+}
+
+/* ================= MODALES (colorbox) — aplica a todos los modales del sistema ================= */
+#cboxOverlay{ background: rgba(8,12,16,.72) !important; }
+#cboxContent{
+    background: var(--surface) !important;
+    border-radius: 12px;
+}
+div#modal{ font-family: 'Public Sans', Tahoma, Arial, sans-serif; }
+div.modal_title{
+    background: var(--surface-2) !important;
+    color: var(--text) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 8px;
+}
+div#modal span.field-name{ color: var(--text-muted); }
+div#modal input, div#modal textarea, div#modal select{
+    background: var(--bg) !important;
+    color: var(--text) !important;
+    border: 1px solid var(--border) !important;
+}
+div#modal input.error, table#grid-content input.error{
+    background: var(--critical-soft) !important;
+    border: 1px solid var(--critical) !important;
+}
+div.send-button, div.send-button.crear-volver, div.add-button{
+    background: var(--accent) !important;
+    color: var(--accent-contrast) !important;
+    border-radius: 7px;
+    text-align: center;
+    padding-left: 0 !important;
+}
+div.send-button:hover, div.send-button.crear-volver:hover, div.add-button:hover{
+    background: var(--accent-strong) !important;
+}
+div.send-button.volver, div.send-button.volver-abm{
+    background: var(--surface-2) !important;
+    color: var(--text) !important;
+    border-radius: 7px;
+    text-align: center;
+    padding-left: 0 !important;
+}
+
+/* ================= AVISOS (msgBox) ================= */
+div.msgBox{ background: var(--surface) !important; color: var(--text) !important; }
+div.msgBoxTitle{ color: var(--text) !important; border-bottom: 1px solid var(--border) !important; }
+div.msgBoxContent span{ color: var(--text-muted) !important; }
+div.msgBoxButtons input[type='button']{
+    background: var(--accent) !important;
+    border: none !important;
+}
+div.msgBoxButtons input[type='button']:hover{ background: var(--accent-strong) !important; }
+
+/* ================= SCROLLBARS (estético, opcional) ================= */
+#header::-webkit-scrollbar{ width: 8px; }
+#header::-webkit-scrollbar-thumb{ background: var(--border); border-radius: 4px; }

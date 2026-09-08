@@ -1,0 +1,17 @@
+v3.3.0		19 oct	2011		Full support for FNC1
+					Support for Macro 05 and Macro 06
+					Possible to force an encoding
+					Fix bug on chosen encoding with look-ahead
+					Added get methods
+v3.2.0		16 sep	2011		Renaming setStructureAppend by setStructuredAppend
+v3.1.2		28 aug	2011		Fix a bug with double backslash when acceptECI is activated
+					AcceptECI is now turn off by default since it's less common.
+v3.1.1		4  aug	2011		Support for ECI and Structure Append added
+v3.1.0		3  aug	2011		Support for transparent background
+v3.0.0		15 apr	2011		Brand new version which includes some breaking changes.
+					Now supports the possibility to add labels around the barcode really easily thanks to the method addLabel()
+					You can also specify the alignment of the label, rotation, etc.
+					If the label is bigger than the barcode itself, the image will get bigger to avoid text clipping.
+v2.0.0		21 mar	2011		Better support for failure instead of writing the error on the UI, an exception is being thrown.
+v1.0.1		27 sep	2010		Fixed Base256 encoding, fixed C40,Text,X12 encoding 1 character
+v1.0.0		20 aug	2010		New version of DataMatrix.

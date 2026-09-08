@@ -1,0 +1,83 @@
+CREATE TABLE presentaciones_productos (
+relacion_id integer NOT NULL,
+presentacion_id integer NOT NULL, 
+producto_id integer NOT NULL,
+gtin varchar(14),
+unidad_venta boolean DEFAULT FALSE,
+unidad_distribucion boolean DEFAULT FALSE,
+unidades integer NOT NULL
+) WITH oids;
+
+CREATE UNIQUE INDEX idxu_presentacion_productos_prese_produ_unid ON presentacion_productos (presentacion_id, producto_id, unidades);
+
+CREATE TABLE datos_presentaciones(
+presentacion_id integer NOT NULL,
+descripcion varchar(50) NOT NULL
+)  WITH oids;
+CREATE UNIQUE INDEX idxu_datos_presentaciones_pres_id ON datos_presentaciones(presentacion_id);
+
+
+ALTER TABLE datos_productos ADD gtin varchar(13);
+ALTER TABLE datos_productos ADD forma varchar;
+ALTER TABLE datos_productos ADD relacion_monodroga_id integer;
+
+ALTER TABLE datos_trazabilidad ADD relacion_id integer NOT NULL;
+
+ALTER TABLE detalle_movimientos ADD unidades integer NOT NULL;
+
+--MOVIMIENTOS PARA CONSOLIDADO Y DESCONSOLIDADO DE PALLET
+INSERT INTO tipos_movimientos_trazas VALUES (11, 'Baja por Desconsolidado', FALSE);
+INSERT INTO tipos_movimientos_trazas VALUES (12, 'Alta por por Desconsolidado', TRUE);
+
+INSERT INTO tipos_movimientos_trazas VALUES (13, 'Baja por Consolidado', FALSE);
+INSERT INTO tipos_movimientos_trazas VALUES (14, 'Alta por Consolidado', TRUE);
+
+--NUEVO BIOFARMA
+--CODIGO
+--Detalle_MovimientoRecepcionExtendido.php
+--DatoTrazabilidad.php
+--DatoTrazabilidadExtendido.php
+--PresentacionesProductos.php
+--PresentacionesProductosExtendido.php
+
+
+--Producto.php
+--ProductoExtendido.php
+--FrenteProductos.php
+
+--FrenteMovimientos.php
+
+--impresionEtiquetaEstadar.php
+--datamatrixEtiqueta.php
+
+ALTER TABLE presentaciones_productos ADD envases integer default 1; --ENVASES A INFORMAR A SENASA.
+ALTER TABLE presentaciones_productos ALTER unidades set default 1; --PESO  DE CADA PRESENTACION. 
+
+ALTER TABLE datos_trazabilidad ADD unidades INTEGER default 1; -- PESO DE CADA PRESENTACION.
+ALTER TABLE datos_trazabilidad ADD envases INTEGER default 1; -- ENVASES A INFORMAR A SENASA.
+
+
+ALTER TABLE datos_productos ADD producto_seriado boolean DEFAULT FALSE;
+
+ALTER TABLE datos_productos ADD unidad_medida_id INTEGER;
+UPDATE datos_productos SET unidad_medida_id = 1 ;
+ALTER TABLE datos_productos ALTER unidad_medida_id SET NOT NULL;
+
+CREATE TABLE tipos_unidad_medida(
+id_unidad integer, 
+unidad_nombre varchar(100),
+unidad_abreviatura varchar(10)
+)WITH oids;
+CREATE UNIQUE INDEX idx_tipos_unidad_medida_id_unidad ON tipos_unidad_medida(id_unidad);
+
+INSERT INTO tipos_unidad_medida VALUES (1,'Kilogramos','Kg');
+INSERT INTO tipos_unidad_medida VALUES (2,'Litros','Lts');
+
+-- ALTER TABLE detalle_movimientos ADD relacion_id_pp INTEGER; no va!!
+
+--Frente
+--presentacionesProductos se agregó el campo envases -- BOTELLA = 1 ENVASE,  CAJA  = 4 ENVASES , PALLET = 40 ENVASES
+--Productos se agregó el campo producto_seriado -- si -> Genera la trazabilidad por serie / no -> No genera serie , la trazabilidad se realiza por lote
+--Productos se agragó el campo unidad_medida_id -- Segun table tipos_unidad_medida
+--ABM de unidad de medida -- La tabla es tipos_unidad_medida
+--Alta de stock por codigo AGREGAR CAMPO estanteria_origen

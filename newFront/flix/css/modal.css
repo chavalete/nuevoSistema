@@ -1,0 +1,328 @@
+div#modal, modal-next-step {
+    font-family: Tahoma;
+}
+div.modal_title {
+    width: 99%; 
+    height: 30px; 
+    background-color: #085599;
+    border-radius: 4px;
+    color: #FFFFFF;
+    font-size: 12pt;
+    font-weight: bold;
+    border: 1px solid #AAAAAA;
+    padding-top: 10px;
+    margin-bottom: 13px;
+}
+div.modal_title span.title {
+    padding-left: 7px;
+}
+div#modal span.field-name {
+    font-size: 9pt;
+    text-align: right;
+}
+div#modal input, div#modal textarea{
+    background-color: #50BEEF;
+    border: 1pt solid #1D82CA;
+    color: #08511C;
+    height: 25px;
+    width: 200px;
+    margin: 0 5px;
+    padding: 2px 2px 4px;    
+    font-size: 0.8em;
+    margin: 0 5px;
+    padding: 2px 2px 4px 2px;
+}
+ div#modal textarea{
+    height: 70px;
+    font-size: 13px;
+    resize: none;
+}
+div#modal input.error, table#grid-content input.error {
+    background-color: lightpink;
+    border: 1pt solid red;
+}
+div#modal select{
+    background-color: #50BEEF; 
+    border: 1pt solid #1D82CA; 
+    color: #08511C; 
+    font-size: 1em; 
+    height: 30px; 
+    margin: 0 5px; 
+    padding: 4px 2px 4px; 
+    width: 205px;    
+}
+div#modal select option {
+    height: 25px;
+    padding-top: 5px;
+}
+div#modal select option:hover {
+    height: 25px;
+    padding-top: 5px;
+    background-color: red;
+}
+div#modal td.field-input {
+    padding: 7px 0 7px 0;
+    vertical-align: middle;
+    height: 26px;
+    text-align: right;
+    width: 95px;
+}
+div#modal td.field-name {
+    padding: 7px 0 7px 0;
+    vertical-align: middle;
+    height: 26px;
+    text-align: right;
+    width: 95px;
+}
+div.send-button, div.send-button.crear-volver{
+    float: right;
+    background: url("../img/buscar-btn.png") repeat scroll 0 0 transparent;
+    border: medium none;
+    color: #FFFFFF;
+    font-size: 10pt;
+    font-weight: 700;
+    height: 22px;
+    margin: 0 13px 5px 0;
+    padding: 5px 0 0 34px;
+    width: 107px;  
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    cursor: pointer;
+    z-index: 1000;
+}
+div.send-button:hover, div.send-button-volver:hover{
+    background: url("../img/buscar-btn.png") repeat scroll 0 29px transparent;
+}
+div.send-button.volver, div.send-button.volver-abm{
+    float: right;
+    background: url("../img/btn_login.jpg") repeat scroll 0 0 transparent;
+    border: medium none;
+    color: #FFFFFF;
+    font-size: 10pt;
+    font-weight: 700;
+    height: 22px;
+    margin: 0 13px 5px 0;
+    padding: 5px 0 0 34px;
+    width: 90px;  
+    bottom: 0;
+    right: 160px;
+    position: absolute;
+    cursor: pointer;    
+}
+div.add-button{
+    float: right;
+    background: url("../img/btn_login.jpg") repeat scroll 0 0 transparent;
+    border: medium none;
+    color: #FFFFFF;
+    font-size: 10pt;
+    font-weight: 700;
+    height: 22px;
+    margin: 0 0 5px 0;
+    padding: 5px 0 0 34px;
+    width: 90px;  
+    bottom: 0;
+    right: 0;
+    cursor: pointer;    
+}
+div.add-button:hover{
+    background: url("../img/btn_login.jpg") repeat scroll 0 29px transparent;
+}
+hr.modal-divisor{
+    margin: 5px 0;
+}
+td.cabecera-title{
+    background-color: #5D8BBE;
+    width: 20%;
+    text-align: right;
+    color: white;
+    font-size: 11pt;
+    padding: 5px;
+    font-weight: 700;
+}
+td.cabecera-detalle{
+    background-color: #D9EBF5;
+    width: 80%;    
+    text-align: left;
+}
+td.cabecera-title-blue{
+    background-color: #1D8AC2;
+    width: 20%;
+    text-align: right;
+    color: white;
+    font-size: 11pt;
+    padding: 5px 10px 5px 5px;
+    font-weight: 700;
+}
+td.cabecera-detalle-blue{
+    background-color: #D6D6D6;
+    width: 80%;    
+    text-align: left;
+    padding-left: 10px;
+}
+div.detalles-herramientas{
+    text-align: right;
+}
+th.detalles-titulo{
+    background-color: #808080;
+    text-align: center;
+    color: white;
+    padding: 0.4em;
+    border: medium none;
+    font-weight: bold;
+}
+th.detalles-titulo-dark{
+    background-color: gray;
+    text-align: center;
+    color: white;
+    padding: 0.4em;
+    border: medium none;
+    font-weight: bold;
+}
+div.detalles-cabecera{
+    width: 100%;
+    /*margin-top: 35px;*/
+    
+}
+div.detalles-table{
+    max-height: 470px;
+    max-width: 1095px;
+    overflow: auto;
+    margin: 15px 0px;
+}
+tr.detalles-dato{
+   font-size: 11pt;
+   padding: 7px;
+   text-align: left;
+   height: 30px;
+}
+tr.detalles-dato td {
+    padding-left: 7px;
+}
+tr.detalles-dato.par{
+    background-color: #5D8BBE;
+    color: white;
+}
+tr.detalles-dato.impar{
+    background-color: #D9EBF5;
+}
+tr.detalles-dato.bloqueado_par, 
+tr.detalles-dato.bloqueado_impar, 
+tr.detalles-dato.alertado_par, 
+tr.detalles-dato.alertado_impar{
+    background-color: salmon;
+}
+tr.detalles-dato-blue{
+   font-size: 11pt;
+   padding: 7px;
+   text-align: left;
+   height: 30px;
+}
+tr.detalles-dato-blue td{
+    padding-left: 5px;
+}
+tr.detalles-dato-blue.par{
+    background-color: #5D8BBE;
+    color: white;
+}
+tr.detalles-dato-blue.impar{
+    background-color: #D9EBF5;
+}
+div.detalle-cabecera-editar{
+    background-image: url("../img/herramientas.png");
+    cursor: pointer;
+    height: 20px;
+    margin: 0 3px;
+    width: 20px;
+    background-position: 90px 0;
+    float: left;
+}
+div.herramienta-alertar{
+    background-image: url("../img/alertar.png");
+    cursor: pointer;
+    height: 20px;
+    margin: 0 3px;
+    width: 20px;
+    float: left;
+}
+div.herramienta-imprimirDetalle{
+    background-image: url("../img/herramientas.png");
+    cursor: pointer;
+    height: 20px;
+    margin: 0 3px;
+    width: 20px;
+    background-position: 221px 0;
+    float: left;
+}
+div.detalle-editar{
+    background-image: url("../img/herramientas.png");
+    cursor: pointer;
+    height: 20px;
+    margin: 0 3px;
+    width: 20px;
+    background-position: 90px 0;    
+    float: left;
+}
+div.herramienta-bloquear{
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+    margin: 0 3px;
+    float: left;
+}
+div.addButton{
+    background-image: url("../img/icon_add.gif");
+    width: 10px;
+    height: 10px;
+    cursor: pointer;
+}
+div#modal td.addButton{
+    vertical-align: middle;
+    width: 10px;
+    padding: 0;
+}
+div.eliminar{
+    background: url(../img/UI/ui-icons_cd0a0a_256x240.png) repeat scroll -96px -128px transparent;
+    width: 13px;
+    height: 13px;
+    cursor: pointer;
+}
+div#codigos{
+    max-height: 390px;
+    max-width: 360px;
+    overflow: auto;
+}
+div#productos{
+    max-height: 625px;
+    max-width: 720px;
+    overflow: auto;
+}
+div.herramientasEdit-detalles, div.herramientasEdit-detalle { display: none; }
+div.editTool-detalles, 
+div.editTool-detalle {
+    background-image: url("../img/herramientas.png");
+    cursor: pointer;
+    float: left;
+    height: 20px;
+    margin: 0 2px;
+    width: 20px;    
+}
+div.editTool-detalles.acept, div.editTool-detalle.acept { background-position: 129px 0; }
+div.editTool-detalles.cancel, div.editTool-detalle.cancel { background-position: 108px 0; }
+
+
+div.inicio div.codigoAdded span.codigo {
+    font-size: 12px; 
+    background-color: #D9EBF5; 
+    border: 1px solid #5D8BBE; 
+    border-radius: 5px; 
+    padding: 3px;
+    margin: 0 5px 5px 0;
+    float: left;
+}
+div.inicio div.codigoAdded span.codigoBorrar {
+    font-size: 15px; 
+    margin-left: 5px; 
+    color: red; 
+    cursor: pointer;
+}

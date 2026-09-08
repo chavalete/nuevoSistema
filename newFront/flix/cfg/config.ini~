@@ -1,0 +1,280 @@
+[common]
+    ;; CSS que se cargan
+    css[] = flix.css
+    css[] = generic.css
+    css[] = menu.css
+    css[] = colorbox.css
+    css[] = modal.css
+    css[] = jQueryUI.css
+    css[] = msgBoxLight.css
+    css[] = tooltip.css    
+
+    ;; JS que se cargan
+    js[] = jQuery.min-1.8.3.js
+    js[] = jQuery.colorbox-min.js
+    js[] = jquery-ui.min.js
+    ;;js[] = jquery-ui-1.10.3.custom.min.js    
+    js[] = flix.js
+    js[] = menu.js
+    js[] = modal.js
+    js[] = jquery.msgBox.js
+    js[] = jsCalls.js
+
+;; Valores que envia la primer llamada al process
+[defaults_js]
+    ;; Valores por default que envia la primer llamada del process
+    accion       = hacerBusqueda ; CUIDADO al cambiar este valor!!!!! Requiere ajustar la busqueda de los modales
+    ordenarPor   = 
+    ordenarOrden = asc
+    pagina       = 1
+    porPagina    = 10
+    tipo         = consultaStock
+
+;; Menu principal y submenues
+[menu]
+    Movimientos[] = true
+    Movimientos[] = Entradas
+    Movimientos[] = Salidas
+
+    Stock[] = true
+    Stock[] = Consulta stock
+    Stock[] = Auditor stock
+    Stock[] = Control stock
+
+    ABMS[] = true
+;;  ABMS[] = Sucursales
+    ABMS[] = Almacenes
+    ABMS[] = Categorias
+    ABMS[] = Clientes
+    ABMS[] = Custodia
+;;    ABMS[] = Departamentos
+    ABMS[] = Distribuidores
+    ABMS[] = Estanterias
+    ABMS[] = Estados    
+;;    ABMS[] = Laboratorios
+    ABMS[] = Localidades
+    ABMS[] = Marcas
+    ABMS[] = Medicos    
+;;    ABMS[] = Municipios
+    ABMS[] = Obras sociales
+    ABMS[] = Pacientes    
+    ABMS[] = Productos
+    ABMS[] = Proveedores
+    ABMS[] = Provincias
+    ABMS[] = Vendedores
+;;    ABMS[] = Usuarios
+;;    ABMS[] = Vehiculos
+
+    Utilidades[] = false
+    Utilidades[] = Importacion
+
+    Mensajeria[] = false
+    Mensajeria[] = Transacciones
+    Mensajeria[] = Transacciones agrupadas
+    Mensajeria[] = Bloqueador
+    Mensajeria[] = Pendientes de confirmacion
+
+    Pedidos[] = true
+    Pedidos[] = Listado de Pendientes
+    Pedidos[] = Pedidos
+    Pedidos[] = Seguimiento Historico 
+
+    Distribucion[] = false
+    Distribucion[] = Hoja de ruta
+;;    Distribucion[] = Seguimiento
+
+;; Se aca hasta el final del archivo
+;; Configuraciones propias de cada seccion
+[entradas]
+    ;; Nombre de la seccion para poner como título
+    display_name = Listado de entradas
+
+    ;; Botonera superior de la seccion
+    flix_boton_top[] = Busqueda avanzada
+    flix_boton_top[] = Alta de stock
+    flix_boton_top[] = Alta stock por codigo
+    flix_boton_top[] = Reimprimir codigo de trazabilidad
+
+[salidas]
+    display_name = Listado de Salidas
+
+    flix_boton_top[] = Busqueda avanzada
+;;    flix_boton_top[] = Salida de stock
+;;    flix_boton_top[] = Exportar salidas
+    flix_boton_top[] = Preparar pedido
+
+[consultaStock]
+    display_name = Consultas de stock
+
+    flix_boton_top[] = Busqueda Avanzada
+    flix_boton_top[] = Exportar Stock
+
+    ;; Campo usado para ordenar por default
+    defaultOrder = Nombre
+
+[auditorStock]
+    display_name = Auditor de stock
+
+    flix_boton_top[] = Busqueda Avanzada
+
+[controlStock]
+    display_name = Control de stock
+
+    flix_boton_top[] = Control
+
+[clientes]
+    display_name = Listado de clientes
+
+    flix_boton_top[] = Busqueda avanzada
+    flix_boton_top[] = Crear nuevo
+
+[categorias]
+    display_name = Listado de categorias
+
+    flix_boton_top[] = Busqueda avanzada
+    flix_boton_top[] = Crear nuevo
+
+[productos]
+    display_name = Listado de productos
+
+    flix_boton_top[] = Busqueda avanzada
+    flix_boton_top[] = Crear nuevo
+
+[marcas]
+    display_name = Listado de marcas
+
+    flix_boton_top[] = Busqueda avanzada
+    flix_boton_top[] = Crear nuevo
+
+[medicos]
+    display_name = Listado de medicos
+
+    flix_boton_top[] = Busqueda avanzada
+    flix_boton_top[] = Crear nuevo
+
+[pacientes]
+    display_name = Listado de pacientes
+
+    flix_boton_top[] = Busqueda avanzada
+    flix_boton_top[] = Crear nuevo
+
+[proveedores]
+    display_name = Listado de proveedores
+
+    flix_boton_top[] = Busqueda avanzada
+    flix_boton_top[] = Crear nuevo
+
+[almacenes]
+    display_name = Listado de almacenes
+
+    flix_boton_top[] = Busqueda avanzada
+    flix_boton_top[] = Crear nuevo
+
+[estanterias]
+    display_name = Listado de estanterias
+
+    flix_boton_top[] = Busqueda avanzada
+    flix_boton_top[] = Crear nuevo
+
+[sucursales]
+    display_name = Listado de sucursales
+
+    flix_boton_top[] = Busqueda avanzada
+    flix_boton_top[] = Crear nuevo
+
+[obrasSociales]
+    display_name = Listado de obras sociales
+
+    flix_boton_top[] = Busqueda avanzada
+    flix_boton_top[] = Crear nuevo
+
+[vendedores]
+    flix_boton_top[] = Busqueda avanzada    
+    flix_boton_top[] = Crear nuevo
+
+[laboratorios]
+    flix_boton_top[] = Busqueda avanzada    
+    flix_boton_top[] = Crear nuevo
+
+[municipios]
+    flix_boton_top[] = Busqueda avanzada    
+    flix_boton_top[] = Crear nuevo
+
+[departamentos]
+    flix_boton_top[] = Busqueda avanzada    
+    flix_boton_top[] = Crear nuevo
+
+[distribuidores]
+    flix_boton_top[] = Busqueda avanzada
+    flix_boton_top[] = Crear nuevo
+
+[importacion]
+    display_name = Importar remesa
+
+    flix_boton_top[] = Importar remesa
+
+[busquedaPorCodigo]
+    display_name = Busqueda por codigo
+
+[transacciones]
+    display_name = Transacciones
+
+    flix_boton_top[] = Busqueda avanzada
+
+[bloqueador]
+    display_name = Bloqueador
+
+    flix_boton_top[] = Busqueda avanzada
+
+[transaccionesAgrupadas]
+    display_name = Transacciones agrupadas
+
+    flix_boton_top[] = Busqueda avanzada
+    flix_boton_top[] = Exportador movimientos SAP
+
+[pendientesDeConfirmacion]
+    display_name = Transacciones Pendientes de Recepción
+
+    flix_boton_top[] = Busqueda avanzada
+	
+[listadoDePendientes]
+    display_name = Listado de pendientes
+    flix_boton_top[] = Busqueda avanzada
+
+[estados]
+    flix_boton_top[] = Busqueda avanzada
+    flix_boton_top[] = Crear nuevo
+
+[pedidos]
+    flix_boton_top[] = Busqueda avanzada
+    flix_boton_top[] = Alta pedidos
+
+[provincias]
+    flix_boton_top[] = Busqueda avanzada
+    flix_boton_top[] = Crear nuevo
+
+[localidades]
+    flix_boton_top[] = Busqueda avanzada
+    flix_boton_top[] = Crear nuevo
+
+[usuarios]
+    flix_boton_top[] = Busqueda avanzada
+    flix_boton_top[] = Crear nuevo
+
+[vehiculos]
+    flix_boton_top[] = Busqueda avanzada
+    flix_boton_top[] = Crear nuevo
+
+[hojaDeRuta]
+    flix_boton_top[] = Busqueda avanzada
+    flix_boton_top[] = Alta HDR
+
+[seguimiento]
+    flix_boton_top[] = Busqueda avanzada
+
+[seguimientoHistorico]
+    flix_boton_top[] = Busqueda avanzada
+
+[custodia]
+    flix_boton_top[] = Busqueda avanzada
+    flix_boton_top[] = Crear nuevo

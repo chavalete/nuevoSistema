@@ -1,0 +1,14 @@
+CREATE SEQUENCE seq_movimiendo_hdr_id;
+
+CREATE TABLE movimientos_hdr(
+    hoja_detalle_id bigint not null,
+    fecha_hora timestamp default now() not null,
+    pedido_id bigint not null,
+    hoja_id bigint not null,
+    estado_id smallint not null,
+    movimientos_hdr_id bigint DEFAULT nextval('seq_movimiendo_hdr_id'),
+    movimiento_usuario_id integer not null
+
+) WITH OIDS;
+
+CREATE 

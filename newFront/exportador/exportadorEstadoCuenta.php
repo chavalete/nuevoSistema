@@ -1,0 +1,202 @@
+<?php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/newFront/libreria/almacenamiento/FrenteAlmacenamiento.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/newFront/libreria/includes/FuncionesComunes.php';
+ob_end_clean();                                                                                                                                                                  
+require_once $_SERVER['DOCUMENT_ROOT'] .'/newFront/libreria/fpdf/fpdf.php';                                                                                                  
+if($_GET){
+
+	    $arrParametros['tipoReporte']=$_REQUEST['tipoReporte'];
+	    $arrParametros['idCliente'] = $_REQUEST['idCliente'];
+	    $arrParametros['idVendedor'] = $_REQUEST['idVendedor'];    
+	    $arrParametros['idRelacion'] = $_REQUEST['idRelacion'];    
+
+	    $db = NEW FrenteAlmacenamiento();
+	    $objFuncionesComunes =  new FuncionesComunes();
+
+        if($arrParametros['tipoReporte']==1){
+	    
+	    
+	    $db->addSelect('relacion_nombre');
+	    $db->addSelect('vendedor_nombre');
+	    $db->addSelect('importe_deuda');
+	    $db->addFrom('vw_total_deuda_clientes vw');
+	    $db->addFrom('INNER JOIN datos_clientes USING(cliente_id)');
+	    $db->addFrom('INNER JOIN relaciones_clientes_cuentas USING(relacion_id)');
+	    $db->addFrom('INNER JOIN datos_vendedores ON relaciones_clientes_cuentas.vendedor_id = datos_vendedores.vendedor_id');
+	    
+	    if($arrParametros[idRelacion]!='undefined'){
+            $db->addWhere('vw.relacion_id = \'' . $arrParametros[idRelacion] . '\'');
+	    }
+	    
+	    if($arrParametros[idCliente]!='undefined'){
+            $db->addWhere('vw.cliente_id = \'' . $arrParametros[idCliente] . '\'');
+	    }
+	    if($arrParametros[idVendedor]!='undefined'){
+            $db->addWhere('relaciones_clientes_cuentas.vendedor_id = \'' . $arrParametros[idVendedor] . '\'');
+	    }
+	    //$db->addGroup('producto_nombre,producto_presentacion,lote,estanteria_nombre,codigo_referencia,lote_vencimiento, cantidad, datos_lotes.lote_id');
+	    $db->addOrderBy('cliente_nombre');
+	    $db->generarSelect();
+	    $resultado = $db->ejecutar();
+        //echo $db->getQry();exit;
+        if(count($resultado)==0){
+            echo "No se encontraron registros";exit;
+        }
+        
+	    $pdf = new FPDF ('P','mm',array(210,297));
+	    $pdf->AddPage();
+	    
+	    //$pdf->images('ortodontia_negro_azul.jpg',$x=null, $y=null, $w=0, $h=0, $type='', $link='');
+	    $pdf->Image('ortodontia_negro_azul.jpg', 135, 10, 65, 25, 'jpg');
+	    
+	    $pdf->SetFont('Arial','B',10);
+	    $pdf->Text(90,10, "INFORME GENERAL");
+	    $pdf->Line(10, 12 ,200 , 12);
+	    
+	    //$pdf->Rect(10, 30 ,150 , 12);
+	    
+	    $pdf->Text(12,20, "CLIENTE:");
+	    if($arrParametros['idCliente']=='undefined'){
+            $pdf->Text(30,20, "TODOS");
+	    }else{
+            $pdf->Text(30,20, $resultado[0][cliente_nombre]);
+	    }
+	    
+	    $today = getdate();
+	    $pdf->Text(12,25, "FECHA: " . $today['mday'] . "/" . $today['mon'] . "/" . $today['year']);
+	    
+	    if($resultado[0]['vendedor_nombre']!=NULL){
+            $pdf->Text(60,25, "VENDEDOR:");
+            $pdf->Text(82,25, $resultado[0][vendedor_nombre]);
+	    }
+	    $pdf->Line(10, 30 ,200 , 30);
+	    $pdf->Text(20,34, "CUENTA");
+	    $pdf->Text(100,34, "Importe Deuda");
+	    
+	    $alto = 40;
+	    $importeTotal=0;
+	    $i=0;
+	    foreach($resultado AS $data){
+                $pdf->Text(20,$alto, $data['relacion_nombre']);
+                $pdf->Text(105,$alto, $objFuncionesComunes->formatoMoneda($data['importe_deuda']));
+                $alto = $alto + 5;
+                $importeTotal = $importeTotal + $data['importe_deuda'];
+                
+                if($i==45 || $i==95){
+                    $pdf->AddPage();;
+                    $alto= 10;
+                    $pdf->Text(20,34, "CUENTA");
+                    $pdf->Text(100,34, "IMPORTE DEUDA");
+                    $alto = 16;
+                }
+                $i++;
+	    }
+	    $pdf->Line(10, $alto ,200 , $alto);
+	    $pdf->Text(92,$alto+5, "Total:   ".$objFuncionesComunes->formatoMoneda($importeTotal));
+	    
+	}else{
+        $db->addSelect('to_char(factura_fecha,\'DD/MM/YY\') AS factura_fecha');
+        $db->addSelect('factura_nro');
+        $db->addSelect('vw.factura_faltan_fact');
+        $db->addSelect('cliente_nombre');
+        $db->addFrom('vw_pendiente_por_factura vw');
+        $db->addFrom('INNER JOIN datos_facturas USING(factura_id)');
+        $db->addFrom('INNER JOIN datos_clientes ON vw.cliente_id = datos_clientes.cliente_id');
+        $db->addFrom('LEFT JOIN datos_vendedores ON datos_clientes.vendedor_id = datos_vendedores.vendedor_id');
+            
+	    
+	    if($arrParametros[idCliente]!='undefined'){
+            $db->addWhere('vw.cliente_id = \'' . $arrParametros[idCliente] . '\'');
+	    }
+	    
+	    if($arrParametros['idRelacion']!=null && $arrParametros['idRelacion']!='undefined'){
+            $db->addWhere('vw.relacion_id = \'' . $arrParametros[idRelacion] . '\'');
+	    }
+	    if($arrParametros[idVendedor]!='undefined' && $arrParametros[idVendedor]!=NULL){
+            $db->addWhere('datos_clientes.vendedor_id = \'' . $arrParametros[idVendedor] . '\'');
+	    }
+	    //$db->addGroup('relacion_id,cliente_nombre');
+	    $db->addOrderBy('cliente_nombre, factura_id');
+	    $db->generarSelect();
+	    //echo $db->getQry();exit;
+	    $resultado = $db->ejecutar();
+	    $pdf = new FPDF ('P','mm',array(210,297));
+	    $pdf->AddPage();
+	    
+	    //$pdf->images('ortodontia_negro_azul.jpg',$x=null, $y=null, $w=0, $h=0, $type='', $link='');
+	    $pdf->Image('ortodontia_negro_azul.jpg', 135, 10, 65, 25, 'jpg');
+	    
+	    $pdf->SetFont('Arial','B',10);
+	    $pdf->Text(90,10, "INFORME GENERAL");
+	    $pdf->Line(10, 12 ,200 , 12);
+	    
+	    //$pdf->Rect(10, 30 ,150 , 12);
+	    
+	    $pdf->Text(12,20, "CLIENTE:");
+	    
+	    $today = getdate();
+	    
+	    $pdf->Text(12,25, "FECHA: " . $today['mday'] . "/" . $today['mon'] . "/" . $today['year']);
+	    
+	    if($arrParametros['idCliente']=='undefined'){
+            $pdf->Text(30,20, "TODOS");
+	    }else{
+            $pdf->Text(30,20, $resultado[0][cliente_nombre]);
+	    }
+	    $pdf->Line(10, 30 ,200 , 30);
+	    
+	    //$pdf->Text(20,34, "CLIENTE");
+	    $pdf->Text(30,34, "FECHA");
+	    $pdf->Text(80,34, "REMITO");
+	    $pdf->Text(135,34, "IMPORTE DEUDA");
+	    
+	    $alto = 40;
+	    $importeTotal=0;
+	    $totalAcumulado=0;
+	    $i=0;
+	    $antClienteNombre=$resultado[0]['cliente_nombre'];
+	    foreach($resultado AS $data){
+            
+            if($antClienteNombre == $data['cliente_nombre']){
+                $pdf->Text(30,$alto, $data['factura_fecha']);
+                $pdf->Text(75,$alto, $data['factura_nro']);
+                $pdf->Text(143,$alto, $objFuncionesComunes->formatoMoneda($data['factura_faltan_fact']));
+                $alto = $alto + 5;
+                $importeTotal = $importeTotal + $data['factura_faltan_fact'];
+            }else{
+                $pdf->Text(143,$alto, "Total:   ".$objFuncionesComunes->formatoMoneda($importeTotal));
+		$totalAcumulado = $totalAcumulado + $importeTotal;
+		$alto = $alto + 5;
+                $pdf->Line(10, $alto ,200 , $alto);
+                
+                $alto = $alto + 5;
+                $importeTotal=0;
+                $pdf->Text(30,$alto, $data['factura_fecha']);
+                $pdf->Text(75,$alto, $data['factura_nro']);
+                $pdf->Text(125,$alto, $objFuncionesComunes->formatoMoneda($data['factura_faltan_fact']));
+                $alto = $alto + 5;
+                $importeTotal = $importeTotal + $data['factura_faltan_fact'];
+            }
+            if($alto> 270){
+                $pdf->AddPage();;
+                /*$alto= 10;
+                $pdf->Text(20,34, "CLIENTE");
+                $pdf->Text(90,34, "FECHA");
+                $pdf->Text(110,34, "REMITO");
+                $pdf->Text(155,34, "IMPORTE DEUDA");*/
+                $alto = 16;
+            }
+            $i++;
+            $antClienteNombre = $data['cliente_nombre'];
+            //$totalAcumulado = $totalAcumulado + $importeTotal;
+	    }
+	    $pdf->Text(130,$alto, "Total:   ".$objFuncionesComunes->formatoMoneda($importeTotal));
+	    $totalAcumulado = $totalAcumulado + $importeTotal;
+        $alto = $alto + 5;
+	    $pdf->Line(10, $alto ,200 , $alto);	
+	    $alto = $alto + 5;
+        $pdf->Text(116,$alto, "Total General:   ".$objFuncionesComunes->formatoMoneda($totalAcumulado));
+    }
+}
+$pdf->Output();
+?>

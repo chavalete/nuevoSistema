@@ -1,0 +1,54 @@
+DELETE FROM 	 movimientos_trazabilidad                         	;
+DELETE FROM 	 datos_trazabilidad                               	;
+DELETE FROM 	 trazabilidad_codigos                             	;
+DELETE FROM 	 datos_movimientos                                	;
+DELETE FROM 	 detalle_movimientos                              	;
+DELETE FROM 	 datos_pedidos                                    	;
+DELETE FROM 	 detalle_pedidos                                  	;
+DELETE FROM 	 datos_transacciones_anmat                        	;
+DELETE FROM 	 detalle_transacciones_anmat                      	;
+DELETE FROM 	 datos_autogestion                                	;
+DELETE FROM 	 detalle_autogestion                              	;
+DELETE FROM 	 transacciones_pendientes_anmat                   	;
+DELETE FROM 	 emails                                           	;
+DELETE FROM 	 log_consultas                                    	;
+DELETE FROM 	 log_email_envios                                 	;
+DELETE FROM 	 mensajeria_anmat                                 	;
+DELETE FROM 	 movimientos_pedidos                              	;
+DELETE FROM 	 pedidos_lotes                                    	;
+--DELETE FROM 	 datos_productos                                  	;
+--DELETE FROM 	 datos_productos_anmat                            	;
+DELETE FROM 	 datos_hojas_de_ruta                              	;
+DELETE FROM 	 detalle_hojas_de_ruta                            	;
+DELETE FROM 	 datos_remesas                                    	;
+DELETE FROM 	 detalle_remesas                                  	;
+DELETE FROM 	 relacion_error_id_error_anmat                    	;
+DELETE FROM 	 datos_errores_anmat                              	;
+DELETE FROM 	 stock_completo                                   	;
+--DELETE FROM 	 datos_clientes;
+--DELETE FROM 	 datos_proveedores	; 									
+--DELETE FROM 	 datos_categorias;
+--DELETE FROM 	 datos_distribuidores                             	; 
+DELETE FROM 	 datos_sucursales_usuarios_anmat                  	; 
+--DELETE FROM 	 datos_tipos_agente 	;				   
+--DELETE FROM 	 datos_estados                                    	WHERE estado_id NOT IN (1,2,3,12); 
+DELETE FROM 	 datos_lotes                                      	; 
+--DELETE FROM 	 datos_marcas                                     	; 
+--DELETE FROM 	 datos_estanterias                                	; 
+--DELETE FROM 	 datos_almacenes                                  	; 
+--DELETE FROM 	 datos_sucursales;
+--DELETE FROM 	 datos_medicos                                    	; 
+--DELETE FROM 	 datos_obras_sociales                             	; 
+--DELETE FROM 	 datos_pacientes                                  	; 
+--DELETE FROM 	 datos_vendedores                                 	; 
+--DELETE FROM 	 datos_localidades                                  	; 
+--DELETE FROM 	 datos_provincias                                 	; 
+--DELETE FROM 	 datos_custodiantes                                 	; 
+DELETE FROM 	 datos_usuarios WHERE usuario_id NOT IN (1,2,3);
+DELETE FROM      tmp_control_stock;
+--DELETE FROM    presentaciones_productos;
+--DELETE FROM    datos_presentaciones;
+
+
+
+    

@@ -1,0 +1,432 @@
+<?php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/mensajeria/libreria/almacenamiento/FrenteAlmacenamiento.php';
+
+
+
+
+class ReprocesoMovimientos
+{
+    private $_db_Sc;
+    private $_db_dM;
+    
+
+    public function __construct() {
+        $this->_db_Sc = new FrenteAlmacenamiento('dmelmac');
+        $this->_db_dM = new FrenteAlmacenamiento('dmelmac');
+    }
+    
+    public function reprocesarRecepciones($nrosReferencia){
+        
+
+	//var_dump($arrParametros);exit;
+        //consulta para generar traer las recepciones
+        $this->_db_Sc->addSelect('mt.id_movimiento AS id_movimiento_sc');
+        $this->_db_Sc->addSelect('mt.tipo_movimiento_id AS id_tipo_movimiento_sc');
+        $this->_db_Sc->addSelect('mt.fecha_hora as fecha_hora_movimiento');
+        $this->_db_Sc->addSelect('mt.fecha_hora::date  AS f_evento ');
+        $this->_db_Sc->addSelect('to_char(mt.fecha_hora, \'HH24:MI\') AS h_evento');
+        $this->_db_Sc->addSelect('fn_get_codigo_trazabilidad_new(trazabilidad_codigo) AS numero_serial');
+        $this->_db_Sc->addSelect('dl.lote_nro AS lote');
+        $this->_db_Sc->addSelect('dl.lote_vencimiento AS vencimiento');
+        $this->_db_Sc->addSelect('lpad(dp_tt.producto_gtin,14,\'0\') AS gtin ');
+        $this->_db_Sc->addSelect('CASE WHEN ts.almacen_id = 0  THEN 1 ELSE ts.almacen_id END AS id_sucursal');
+        $this->_db_Sc->addSelect('\'f\' AS es_agrupador');
+        $this->_db_Sc->addFrom('lotes_trazabilidad.movimientos_trazabilidad mt ');
+        $this->_db_Sc->addFrom('INNER JOIN lotes_trazabilidad.datos_trazabilidad dt USING(trazabilidad_id) ');
+        $this->_db_Sc->addFrom('INNER JOIN datos_lotes dl USING(lote_id) ');
+        $this->_db_Sc->addFrom('INNER JOIN datos_productos_a_tt dp_tt ON (dt.producto_id=dp_tt.producto_id)');
+        $this->_db_Sc->addFrom('INNER JOIN tablas_stock ts ON (dt.stock_id = ts.tabla_id)');
+                 
+        //$this->_db_Sc->addWhere(' mt.fecha_hora <= \'2012-08-07 20:00:00\'');
+        $this->_db_Sc->addWhere('mt.id_movimiento IN  (' . $nrosReferencia .')');
+        $this->_db_Sc->addWhere('dt.fecha_alta::date >= \'2011-12-15\' ');
+        $this->_db_Sc->addWhere('mt.tipo_movimiento_id IN (1,5,6,25)');
+	
+
+        $this->_db_Sc->generarSelect();
+
+        //echo $this->_db_Sc->getQry();exit;
+        //$rstdoEtapaIRecepciones = $this->_db_Sc->ejecutar();
+       	$rstdoEtapaIRecepciones = $this->_db_Sc->ejecutar();        
+        $this->salvarTmpReproceso($rstdoEtapaIRecepciones);
+    }
+    public function reprocesarDistribuciones($arrParametros){
+
+        //ahora buscamos todo lo que sea salidas por hdr
+        $this->_db_Sc->addSelect('mt.id_movimiento AS id_movimiento_sc');
+        $this->_db_Sc->addSelect('mt.tipo_movimiento_id AS id_tipo_movimiento_sc');
+        $this->_db_Sc->addSelect('hoja_validada_fecha_hora AS fecha_hora_movimiento');
+        $this->_db_Sc->addSelect('hoja_validada_fecha_hora::date  AS f_evento ');
+        $this->_db_Sc->addSelect('to_char(hoja_validada_fecha_hora, \'HH24:MI\') AS h_evento');
+        $this->_db_Sc->addSelect('fn_get_codigo_trazabilidad_new(trazabilidad_codigo) AS numero_serial');
+        $this->_db_Sc->addSelect('dl.lote_nro AS lote');
+        $this->_db_Sc->addSelect('dl.lote_vencimiento AS vencimiento');
+        $this->_db_Sc->addSelect('lpad(dp_tt.producto_gtin,14,\'0\') AS gtin ');
+        $this->_db_Sc->addSelect('CASE WHEN ts.almacen_id = 0  THEN 1 ELSE ts.almacen_id END AS id_sucursal');
+        $this->_db_Sc->addSelect('CASE WHEN dehdr.es_agrupador THEN \'t\' ELSE \'f\' END AS es_agrupador');
+        $this->_db_Sc->addFrom('lotes_trazabilidad.movimientos_trazabilidad mt ');
+        $this->_db_Sc->addFrom('INNER JOIN lotes_trazabilidad.datos_trazabilidad dt USING(trazabilidad_id) ');
+        $this->_db_Sc->addFrom('INNER JOIN datos_lotes dl USING(lote_id) ');
+        $this->_db_Sc->addFrom('INNER JOIN datos_productos_a_tt dp_tt ON (dt.producto_id=dp_tt.producto_id)');
+        $this->_db_Sc->addFrom('INNER JOIN tablas_stock ts ON (dt.stock_id = ts.tabla_id)');
+        $this->_db_Sc->addFrom('INNER JOIN detalle_hojas_de_ruta dehdr ON mt.id_movimiento = dehdr.factura_id');
+        $this->_db_Sc->addFrom('INNER JOIN datos_hojas_de_ruta USING(hoja_id)');
+	
+        $this->_db_Sc->addWhere('mt.id_movimiento IN (6125906)');
+        $this->_db_Sc->addWhere('hoja_validada=true');
+        $this->_db_Sc->addWhere('dt.fecha_alta::date >= \'2011-12-15\' ');
+        $this->_db_Sc->addWhere('mt.tipo_movimiento_id IN (12) GROUP BY  mt.id_movimiento, mt.tipo_movimiento_id,hoja_validada_fecha_hora,hoja_validada_fecha_hora::date,to_char(hoja_validada_fecha_hora, \'HH24:MI\'),fn_get_codigo_trazabilidad_new(trazabilidad_codigo),dl.lote_nro,dl.lote_vencimiento ,lpad(dp_tt.producto_gtin,14,\'0\'),CASE WHEN ts.almacen_id = 0  THEN 1 ELSE ts.almacen_id END ,CASE WHEN dehdr.es_agrupador THEN \'t\' ELSE \'f\' END');
+
+        $this->_db_Sc->addOrderBy('hoja_validada_fecha_hora ASC');
+
+        $this->_db_Sc->generarSelect();
+
+        echo $this->_db_Sc->getQry();exit;
+        //$rstdoEtapaI = $this->_db_Sc->ejecutar();        
+       	$rstdoEtapaIPedidos = $this->_db_Sc->ejecutar();
+	$this->salvarTmpReproceso($rstdoEtapaIPedidos);
+
+	}
+        
+	public function salvarTmpReproceso($rstdoEtapaI){
+        $arrMensajeria = Array();
+        //si continua insertamos los datos de la primera etama
+        foreach ($rstdoEtapaI as $datos){
+            $this->_db_dM->addFrom('tmp_mensajeria_anmat_reproceso');
+
+            $this->_db_dM->addCamposTabla('id_movimiento_sc');
+            $this->_db_dM->addCamposTabla('id_tipo_movimiento_sc');
+            $this->_db_dM->addCamposTabla('fecha_hora_movimiento');
+            $this->_db_dM->addCamposTabla('f_evento');
+            $this->_db_dM->addCamposTabla('h_evento');
+            $this->_db_dM->addCamposTabla('numero_serial');
+            $this->_db_dM->addCamposTabla('lote');
+            $this->_db_dM->addCamposTabla('vencimiento');
+            $this->_db_dM->addCamposTabla('gtin');
+            $this->_db_dM->addCamposTabla('id_sucursal');
+            $this->_db_dM->addCamposTabla('es_agrupador');
+	    $this->_db_dM->addCamposTabla('soy_reproceso');
+
+            $this->_db_dM->addCamposValue($datos['id_movimiento_sc']);
+            $this->_db_dM->addCamposValue($datos['id_tipo_movimiento_sc']);
+            $this->_db_dM->addCamposValue("'". $datos['fecha_hora_movimiento'] . "'");
+            $this->_db_dM->addCamposValue("'" . $datos['f_evento'] ."'");
+            $this->_db_dM->addCamposValue("'" . $datos['h_evento'] . "'");
+            $this->_db_dM->addCamposValue("'" . $datos['numero_serial'] . "'");
+            $this->_db_dM->addCamposValue("'" . $datos['lote'] . "'");
+            $this->_db_dM->addCamposValue("'" . $datos['vencimiento'] . "'");
+            $this->_db_dM->addCamposValue("'" . $datos['gtin'] . "'");
+            $this->_db_dM->addCamposValue($datos['id_sucursal']);
+            $this->_db_dM->addCamposValue("'" . $datos['es_agrupador'] . "'");
+	    $this->_db_dM->addCamposValue('t');
+        
+            $this->_db_dM->generarInsert();
+            //echo $this->_db_dM->getQry(); 
+            $rstdoEtapaI_inserts = $this->_db_dM->ejecutar();
+            if(count($rstdoEtapaI_inserts) > 0 ){
+                $arrMensajeria[] = $datos;
+            }	    
+        }
+
+        $this->correrEtapaII($arrMensajeria);
+	$this->traerRemitosAgrupados();
+	$this->updateEnsayosClinicos();
+    }
+    
+    
+    public function updateEnsayosClinicos(){
+        $this->_db_dM->addSelect('id_movimiento_sc');
+        $this->_db_dM->addFrom('tmp_mensajeria_anmat_reproceso');
+        $this->_db_dM->addWhere('regristo_finalizado =\'t\'');
+        $this->_db_dM->addWhere('regristo_traspasado =\'f\'');
+        $this->_db_dM->addWhere('id_tipo_movimiento_sc = 12');
+        
+        $this->_db_dM->generarSelect();
+        $rstdo = $this->_db_dM->ejecutar();
+        $idUpdate = Array(); 
+        foreach($rstdo as $id){
+            
+            $this->_db_Sc->addSelect('factura_id');
+            $this->_db_Sc->addFrom('datos_facturas');
+            $this->_db_Sc->addWhere(' factura_id = ? ');
+            $this->_db_Sc->addWhere('convenio_id IN (1517)');
+
+            $this->_db_Sc->generarSelect();
+
+            $rstdoSC = $this->_db_Sc->ejecutar(Array(Array(($id['id_movimiento_sc']))));
+            
+            if(count($rstdoSC) > 0 ){
+                $this->_db_dM->addFrom('tmp_mensajeria_anmat_reproceso');
+            	$this->_db_dM->addCamposUpdate('id_evento=CASE WHEN id_agente= 1  
+                      	                                  THEN 319 
+                              	                          ELSE CASE WHEN id_agente= 2 
+                                      	                            THEN 320 
+                                               		            ELSE CASE WHEN id_agente=3
+                                                               	            THEN 321
+                                                                       	    ELSE -999 
+                                                                       	    END
+                                                               	    END
+                                                       	    END');
+                $this->_db_dM->addWhere('id_movimiento_sc = ' . $rstdoSC[0]['factura_id']);
+                $this->_db_dM->generarUpdate();
+                $this->_db_dM->ejecutar();
+                
+            }
+        }
+    }
+    
+    public function traerRemitosAgrupados(){
+        $this->_db_dM->addSelect('id_movimiento_sc');
+        $this->_db_dM->addFrom('tmp_mensajeria_anmat_reproceso');
+        $this->_db_dM->addWhere('regristo_finalizado =\'t\'');
+        $this->_db_dM->addWhere('regristo_traspasado =\'f\'');
+        $this->_db_dM->addWhere('es_agrupador =\'t\'');        
+        $this->_db_dM->addWhere('id_tipo_movimiento_sc = 12');
+        $this->_db_dM->addOrderBy('id_movimiento_sc');
+        
+        $this->_db_dM->generarSelect();
+        $rstdo = $this->_db_dM->ejecutar();
+        $rstdoEtapaI = Array();
+        foreach ($rstdo AS $rto_agrupado){
+            $this->_db_Sc->addSelect('mt.id_movimiento AS id_movimiento_sc');
+            $this->_db_Sc->addSelect('mt.tipo_movimiento_id AS id_tipo_movimiento_sc');
+            $this->_db_Sc->addSelect('hoja_validada_fecha_hora AS fecha_hora_movimiento');
+            $this->_db_Sc->addSelect('hoja_validada_fecha_hora::date  AS f_evento ');
+            $this->_db_Sc->addSelect('to_char(hoja_validada_fecha_hora, \'HH24:MI\') AS h_evento');
+            $this->_db_Sc->addSelect('fn_get_codigo_trazabilidad_new(trazabilidad_codigo) AS numero_serial');
+            $this->_db_Sc->addSelect('dl.lote_nro AS lote');
+            $this->_db_Sc->addSelect('dl.lote_vencimiento AS vencimiento');
+            $this->_db_Sc->addSelect('lpad(dp_tt.producto_gtin,14,\'0\') AS gtin ');
+            $this->_db_Sc->addSelect('ts.almacen_id AS id_sucursal');
+            $this->_db_Sc->addSelect('\'f\' AS es_agrupador');
+            $this->_db_Sc->addFrom('lotes_trazabilidad.movimientos_trazabilidad mt ');
+            $this->_db_Sc->addFrom('INNER JOIN lotes_trazabilidad.datos_trazabilidad dt USING(trazabilidad_id) ');
+            $this->_db_Sc->addFrom('INNER JOIN datos_lotes dl USING(lote_id) ');
+            $this->_db_Sc->addFrom('INNER JOIN datos_productos_a_tt dp_tt ON (dt.producto_id=dp_tt.producto_id)');
+            $this->_db_Sc->addFrom('INNER JOIN tablas_stock ts ON (dt.stock_id = ts.tabla_id)');
+            $this->_db_Sc->addFrom('INNER JOIN hojas_facturas_agrupadas hfa ON(hfa.factura_id = mt.id_movimiento)');
+            $this->_db_Sc->addFrom('INNER JOIN detalle_hojas_de_ruta dehdr ON ( hfa.en_factura_id= dehdr.factura_id)');
+            $this->_db_Sc->addFrom('INNER JOIN datos_hojas_de_ruta USING(hoja_id)');
+            
+
+            $this->_db_Sc->addWhere('hfa.en_factura_id = ' . $rto_agrupado['id_movimiento_sc']);
+            $this->_db_Sc->addWhere('hfa.factura_id NOT IN (' . $rto_agrupado['id_movimiento_sc'] . ')');
+            
+            
+            $this->_db_Sc->addOrderBy('hoja_validada_fecha_hora ASC');
+
+            $this->_db_Sc->generarSelect();
+	    //echo $this->_db_Sc->getQry();
+            $rstdoAgrupados = $this->_db_Sc->ejecutar();
+            //acumulo los resultados
+            $rstdoEtapaI = array_merge($rstdoEtapaI, $rstdoAgrupados);
+        }
+	if(count($rstdoEtapaI) > 0){
+	        //si continua insertamos los datos de la primera etama
+            $this->_db_dM->addFrom('tmp_mensajeria_anmat_reproceso');
+	    $this->_db_dM->addCamposTabla('id_movimiento_sc');
+            $this->_db_dM->addCamposTabla('id_tipo_movimiento_sc');
+            $this->_db_dM->addCamposTabla('fecha_hora_movimiento');
+            $this->_db_dM->addCamposTabla('f_evento');
+            $this->_db_dM->addCamposTabla('h_evento');
+            $this->_db_dM->addCamposTabla('numero_serial');
+            $this->_db_dM->addCamposTabla('lote');
+            $this->_db_dM->addCamposTabla('vencimiento');
+            $this->_db_dM->addCamposTabla('gtin');
+            $this->_db_dM->addCamposTabla('id_sucursal');
+            $this->_db_dM->addCamposTabla('es_agrupador');
+
+            $this->_db_dM->addCamposValue(':id_movimiento_sc');
+            $this->_db_dM->addCamposValue(':id_tipo_movimiento_sc');
+            $this->_db_dM->addCamposValue(':fecha_hora_movimiento');
+            $this->_db_dM->addCamposValue(':f_evento');
+            $this->_db_dM->addCamposValue(':h_evento');
+            $this->_db_dM->addCamposValue(':numero_serial');
+            $this->_db_dM->addCamposValue(':lote');
+            $this->_db_dM->addCamposValue(':vencimiento');
+            $this->_db_dM->addCamposValue(':gtin');
+            $this->_db_dM->addCamposValue(':id_sucursal');
+            $this->_db_dM->addCamposValue(':es_agrupador');
+
+            $this->_db_dM->generarInsert();
+
+            $rstdoAgrupadorInserts = $this->_db_dM->ejecutar($rstdoEtapaI);
+            
+            $this->correrEtapaII($rstdoEtapaI);
+	}
+    }
+    
+    public function correrEtapaII($rstdoEtapaI){
+        
+        $idMovimientoSzaAnterior = 0;
+        foreach ($rstdoEtapaI as $datoEtapaI){
+            if( $datoEtapaI['id_movimiento_sc']!= $idMovimientoSzaAnterior ) {
+                //echo $datoEtapaI['id_tipo_movimiento_sc'] . "\n";
+                // esta primera consulta busca el qry que trae los datos de la etapa2
+                $this->_db_dM->addSelect('dq.qry_mov_select');
+                $this->_db_dM->addSelect('dq.qry_mov_from');
+                $this->_db_dM->addSelect('dq.qry_mov_where');
+                $this->_db_dM->addSelect('dq.qry_mov_order');
+                $this->_db_dM->addSelect('rm.movimiento_id_scienza');
+                $this->_db_dM->addSelect('rm.movimiento_id_anmat');
+                $this->_db_dM->addSelect('rm.categoria_id');
+
+                $this->_db_dM->addFrom('relacion_movimientos_scienza_anmat rm');
+                $this->_db_dM->addFrom(' INNER JOIN datos_query_etapa_ii dq USING(query_id)');
+                
+                $this->_db_dM->addWhere('rm.movimiento_id_scienza = ?');
+
+                $this->_db_dM->generarSelect();
+                $rstdoPreEtapaII = $this->_db_dM->ejecutar(Array(Array($datoEtapaI['id_tipo_movimiento_sc'])));
+                
+                //Verificamos que si no trae resultado es por que no tenenos el movimiento registrado
+                if(count($rstdoPreEtapaII) > 0){
+                    //Aca se arma y ejecuta el qry para traer los datos de la segunda etapa
+                    $this->_db_Sc->addSelect($rstdoPreEtapaII[0]['qry_mov_select']);
+                    $this->_db_Sc->addFrom($rstdoPreEtapaII[0]['qry_mov_from']);
+                    $this->_db_Sc->addWhere($rstdoPreEtapaII[0]['qry_mov_where']);
+
+                    $this->_db_Sc->generarSelect();
+		    //echo $this->_db_Sc->getQry();
+                    $rstdoEtapaII = $this->_db_Sc->ejecutar(Array(Array($datoEtapaI['id_movimiento_sc'])));
+                    if(count($rstdoEtapaII) > 0){
+                        unset($idEventoAnmat); //lo borramos para que no tenga datos basofia
+                        foreach($rstdoPreEtapaII AS $datoPreEtapaII){
+                            if($datoPreEtapaII['categoria_id'] == $rstdoEtapaII[0]['categoria_id'] || $datoPreEtapaII['categoria_id'] == 0 ){
+                                $idEventoAnmat = $datoPreEtapaII['movimiento_id_anmat'];
+                            }
+                        }
+                        //Controlamos los datos de la Etapa II para controlar que se completen y viejen
+                        if($rstdoEtapaII[0]['gln_origen'] == null || $rstdoEtapaII[0]['gln_origen'] == 0 ){
+                            $rstdoEtapaII[0]['gln_origen'] = '9999999999999';
+                        }
+                        if($rstdoEtapaII[0]['cuit_origen'] == null){
+                            $rstdoEtapaII[0]['cuit_origen'] = '9999999999';
+                        }
+                        if($rstdoEtapaII[0]['gln_destino'] == null || $rstdoEtapaII[0]['gln_origen'] == 0){
+                            $rstdoEtapaII[0]['gln_destino'] = '9999999999999';
+                        }
+                        if($rstdoEtapaII[0]['cuit_destino'] == null){
+                            $rstdoEtapaII[0]['cuit_destino'] = '9999999999';
+                        }
+                        if($rstdoEtapaII[0]['n_remito'] == null){
+                            $rstdoEtapaII[0]['n_remito'] = '0';
+                        }
+                        if($rstdoEtapaII[0]['n_factura'] == null){
+                            $rstdoEtapaII[0]['n_factura'] = '0';
+                        }
+                        if($idEventoAnmat == null){
+                           $idEventoAnmat  = '0';
+                        }
+                        
+                        $idAgente = $rstdoEtapaII[0]['categoria_id'];
+                        if($rstdoEtapaII[0]['categoria_id'] == null){
+                            $idAgente = 0;
+                        }
+                        
+                        
+                        //Ahora actualizamos actualizamos los datos faltantes
+                        $this->_db_dM->addFrom('tmp_mensajeria_anmat_reproceso');
+                        $this->_db_dM->addCamposUpdate('gln_origen =\'' . $rstdoEtapaII[0]['gln_origen'] . '\'' );
+                        $this->_db_dM->addCamposUpdate('cuit_origen =\'' . $rstdoEtapaII[0]['cuit_origen'] . '\'');
+                        $this->_db_dM->addCamposUpdate('gln_destino =\'' . $rstdoEtapaII[0]['gln_destino'] . '\'' );
+                        $this->_db_dM->addCamposUpdate('cuit_destino =\'' . $rstdoEtapaII[0]['cuit_destino'] . '\'' );
+                        $this->_db_dM->addCamposUpdate('n_remito =\'' . $rstdoEtapaII[0]['n_remito'] . '\'' );
+                        $this->_db_dM->addCamposUpdate('n_factura =\'' . $rstdoEtapaII[0]['n_factura'] . '\'');
+                        $this->_db_dM->addCamposUpdate('id_evento = ' . $idEventoAnmat);
+                        $this->_db_dM->addCamposUpdate('regristo_finalizado = true');
+                        $this->_db_dM->addCamposUpdate('id_agente = ' . $idAgente);
+		        $this->_db_dM->addCamposUpdate('referencia_nro =\'' .$rstdoEtapaII[0]['referencia_nro'] . '\'' );
+			
+			if($rstdoEtapaII[0]['dispone_nombre']!= null){
+				$this->_db_dM->addCamposUpdate('dispone_nombre = \'' . $rstdoEtapaII[0]['dispone_nombre'] . '\'');
+			}
+                        $this->_db_dM->addWhere('id_movimiento_sc = ' . $datoEtapaI['id_movimiento_sc'] );
+                        $this->_db_dM->addWhere('id_tipo_movimiento_sc = ' . $datoEtapaI['id_tipo_movimiento_sc'] );
+
+                        $this->_db_dM->generarUpdate();
+                        $resultadoUpdate = $this->_db_dM->ejecutar();
+
+                    }else{
+
+                        //select para traer los remitos de drogueria generados a partir de remitos de farmacia
+                        $this->_db_Sc->addSelect('das.gln AS gln_origen');
+                        $this->_db_Sc->addSelect('\'30681783055\' AS cuit_origen');
+                        $this->_db_Sc->addSelect('CASE WHEN dcl.cliente_gln IS NULL THEN \'0\' ELSE dcl.cliente_gln END AS gln_destino');
+                        $this->_db_Sc->addSelect('substr(trim(dcl.cliente_cuit),1,2) || substr(trim(dcl.cliente_cuit),4,8) || substr(trim(dcl.cliente_cuit),13,1) AS cuit_destino');
+                        $this->_db_Sc->addSelect('CASE WHEN dpv.es_remito THEN df2.factura_letra || fn_get_puesto_venta_real(df2.factura_puesto_venta::smallint, df2.factura_letra::varchar) || \'-\' || df2.factura_nro ELSE \'0\' END AS n_remito');
+                        $this->_db_Sc->addSelect('CASE WHEN dpv.es_remito THEN \'0\' ELSE df2.factura_letra || fn_get_puesto_venta_real(df2.factura_puesto_venta::smallint, df2.factura_letra::varchar) || \'-\' || df2.factura_nro END AS n_factura');
+                        $this->_db_Sc->addSelect('dcat.categoria_id_anmat AS categoria_id');
+                        $this->_db_Sc->addSelect('\'39\' AS id_evento' );
+                        $this->_db_Sc->addSelect('df2.pedido_nro AS referencia_nro' );
+                        
+
+                        $this->_db_Sc->addFrom(' datos_facturas df');
+                        $this->_db_Sc->addFrom(' INNER JOIN datos_pedidos dp USING (pedido_id)');
+                        $this->_db_Sc->addFrom(' INNER JOIN datos_facturas df2 ON (dp.drogueria_factura_id=df2.factura_id)');
+                        $this->_db_Sc->addFrom(' INNER JOIN datos_clientes dcl ON (dcl.cliente_id = df2.cliente_id)');
+                        $this->_db_Sc->addFrom(' INNER JOIN datos_puesto_venta dpv ON (dpv.puesto_venta_nro = df2.factura_puesto_venta)');
+                        $this->_db_Sc->addFrom(' INNER JOIN datos_categorias dcat ON (dcl.categoria_id = dcat.categoria_id)');
+                        $this->_db_Sc->addFrom(' INNER JOIN datos_almacenes_scienza das ON (dpv.almacen_id = das.almacen_id)');
+
+                        $this->_db_Sc->addWhere('df.factura_id = ' . $datoEtapaI['id_movimiento_sc'] );
+
+                        $this->_db_Sc->generarSelect();
+                        $rstdoEtapaII_reimtosFcia = $this->_db_Sc->ejecutar();
+
+                        if(count($rstdoEtapaII_reimtosFcia) > 0 ){
+                            //Controlamos los datos de la Etapa II para controlar que se completen y viejen
+                            if($rstdoEtapaII_reimtosFcia[0]['gln_origen'] == null || $rstdoEtapaII_reimtosFcia[0]['gln_origen'] == 0 ){
+                                $rstdoEtapaII_reimtosFcia[0]['gln_origen'] = '9999999999999';
+                            }
+                            if($rstdoEtapaII_reimtosFcia[0]['cuit_origen'] == null){
+                                $rstdoEtapaII_reimtosFcia[0]['cuit_origen'] = '9999999999';
+                            }
+                            if($rstdoEtapaII_reimtosFcia[0]['gln_destino'] == null || $rstdoEtapaII_reimtosFcia[0]['gln_origen'] == 0){
+                                $rstdoEtapaII_reimtosFcia[0]['gln_destino'] = '9999999999999';
+                            }
+                            if($rstdoEtapaII_reimtosFcia[0]['cuit_destino'] == null){
+                                $rstdoEtapaII_reimtosFcia[0]['cuit_destino'] = '9999999999';
+                            }
+                            if($rstdoEtapaII_reimtosFcia[0]['n_remito'] == null){
+                                $rstdoEtapaII_reimtosFcia[0]['n_remito'] = '0';
+                            }
+                            if($rstdoEtapaII_reimtosFcia[0]['n_factura'] == null){
+                                $rstdoEtapaII_reimtosFcia[0]['n_factura'] = '0';
+                            }
+
+                            $idAgente = $rstdoEtapaII_reimtosFcia[0]['categoria_id'];
+                            if($rstdoEtapaII_reimtosFcia[0]['categoria_id'] == null){
+                                $idAgente = 0;
+                            }
+
+                            //Ahora actualizamos actualizamos los datos faltantes
+                            $this->_db_dM->addFrom('tmp_mensajeria_anmat_reproceso');
+                            $this->_db_dM->addCamposUpdate('gln_origen =\'' . $rstdoEtapaII_reimtosFcia[0]['gln_origen'] . '\'' );
+                            $this->_db_dM->addCamposUpdate('cuit_origen =\'' . $rstdoEtapaII_reimtosFcia[0]['cuit_origen'] . '\'');
+                            $this->_db_dM->addCamposUpdate('gln_destino =\'' . $rstdoEtapaII_reimtosFcia[0]['gln_destino'] . '\'' );
+                            $this->_db_dM->addCamposUpdate('cuit_destino =\'' . $rstdoEtapaII_reimtosFcia[0]['cuit_destino'] . '\'' );
+                            $this->_db_dM->addCamposUpdate('n_remito =\'' . $rstdoEtapaII_reimtosFcia[0]['n_remito'] . '\'' );
+                            $this->_db_dM->addCamposUpdate('n_factura =\'' . $rstdoEtapaII_reimtosFcia[0]['n_factura'] . '\'');
+                            $this->_db_dM->addCamposUpdate('id_evento = ' . $rstdoEtapaII_reimtosFcia[0]['id_evento']);
+                            $this->_db_dM->addCamposUpdate('soy_remito_drog_fcia = true');
+                            $this->_db_dM->addCamposUpdate('regristo_finalizado = true');
+                            $this->_db_dM->addCamposUpdate('id_agente = ' . $idAgente);
+                            $this->_db_dM->addCamposUpdate('referencia_nro = \'' . $rstdoEtapaII_reimtosFcia[0]['referencia_nro'] . '\'');
+                            $this->_db_dM->addCamposUpdate('fecha_hora_transmision =  now()');
+
+                            $this->_db_dM->addWhere('id_movimiento_sc = ' . $datoEtapaI['id_movimiento_sc'] );
+
+                            $this->_db_dM->generarUpdate();
+                            $resultadoUpdate = $this->_db_dM->ejecutar();
+                        }
+                    }
+                }
+            }
+            $idMovimientoSzaAnterior = $datoEtapaI['id_movimiento_sc'];	    
+        }
+    }
+}
+$test = new ReprocesoMovimientos();
+$test->reprocesarDistribuciones();
+exit;
