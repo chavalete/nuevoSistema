@@ -5,7 +5,10 @@
  * @param   <string> $className
  */
 function __autoload($className){
-    $file = $_SERVER['DOCUMENT_ROOT'].DIRECTORY_SEPARATOR.'limonLocal'.DIRECTORY_SEPARATOR.'flix'.DIRECTORY_SEPARATOR.'class'.DIRECTORY_SEPARATOR.$className.'.php';
+    // Ruta calculada en base a la ubicación real de este archivo (inc/autoload.php),
+    // en vez de depender del nombre de la carpeta del sitio bajo DOCUMENT_ROOT.
+    // Antes requería que el sitio viviera exactamente en {DOCUMENT_ROOT}/limonLocal/flix/.
+    $file = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'class'.DIRECTORY_SEPARATOR.$className.'.php';
 
     if(file_exists($file)){
         require_once($file);
