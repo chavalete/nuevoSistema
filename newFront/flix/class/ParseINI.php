@@ -6,9 +6,10 @@ class ParseINI {
     
     private static function loadINI(){
         if(self::$config == false){
-            // CHANGE_POINT
-            self::$file = $_SERVER['DOCUMENT_ROOT'].DIRECTORY_SEPARATOR.'limonLocal'.DIRECTORY_SEPARATOR.'flix'.DIRECTORY_SEPARATOR.'cfg'.DIRECTORY_SEPARATOR.'config.ini';
-            //self::$file = $_SERVER['DOCUMENT_ROOT'].DIRECTORY_SEPARATOR.'flix'.DIRECTORY_SEPARATOR.'cfg'.DIRECTORY_SEPARATOR.'config.ini';
+            // Ruta calculada en base a la ubicación real de este archivo (class/ParseINI.php),
+            // en vez de depender del nombre de la carpeta del sitio bajo DOCUMENT_ROOT.
+            // Antes requería que el sitio viviera exactamente en {DOCUMENT_ROOT}/limonLocal/flix/.
+            self::$file = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'cfg'.DIRECTORY_SEPARATOR.'config.ini';
             self::$config = parse_ini_file(self::$file, true);
         }
     }
