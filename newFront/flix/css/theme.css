@@ -456,16 +456,24 @@ body:has(.login-cuadro){ background: var(--bg) !important; }
 }
 div#modal{ font-family: 'Public Sans', Tahoma, Arial, sans-serif; }
 div.modal_title{
-    background: var(--surface-3) !important;
-    color: var(--text) !important;
-    border: 1px solid var(--border) !important;
-    border-radius: 8px;
+    background: var(--accent) !important;
+    color: var(--accent-contrast) !important;
+    border: none !important;
+    border-radius: 10px;
+    box-shadow: var(--shadow-sm);
 }
-div#modal span.field-name{ color: var(--text-muted); }
+div#modal span.field-name{ color: var(--text-muted); font-weight: 600; }
 div#modal input, div#modal textarea, div#modal select{
-    background: var(--bg) !important;
+    background: var(--accent-soft) !important;
     color: var(--text) !important;
-    border: 1px solid var(--border) !important;
+    border: 1px solid transparent !important;
+    border-radius: 7px;
+    transition: border-color .12s ease, background-color .12s ease;
+}
+div#modal input:focus, div#modal textarea:focus, div#modal select:focus{
+    background: var(--surface) !important;
+    border-color: var(--accent) !important;
+    outline: none;
 }
 div#modal input.error, table#grid-content input.error{
     background: var(--critical-soft) !important;
