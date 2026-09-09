@@ -1,6 +1,6 @@
 <?php $menu = ParseINI::getConfig('menu'); ?>
 <ul class="menu">
-    <?php 
+    <?php
     foreach($menu as $key => $value){
         if($value[0] == true){
             if(count($value) > 1){
@@ -10,11 +10,12 @@
                 ?>
                 <li class="seccion">
                     <a href="#">
+                        <span class="nav-ico"><?=mb_strtoupper(mb_substr($key, 0, 2))?></span>
                         <?=$key?>
                         <span class="arrow"></span>
                     </a>
-                    
-                    <?php 
+
+                    <?php
                     // Ajusta el ancho del menu si el texto supera los 15 caracteres
                     $reSize = false;
                     $newSize = 0;
@@ -29,8 +30,8 @@
                     }
                     ?>
                     <ul style="z-index: 9999;">
-                        <?php 
-                        for($i = 1; $i < count($value); $i++){  
+                        <?php
+                        for($i = 1; $i < count($value); $i++){
                             $splited = explode(' ', $value[$i]);
                             for($e=0; $e<count($splited); $e++){
                                 if($e == 0){
@@ -47,21 +48,24 @@
                             <li class="menu-option" params="<?=$params;?>" style="<?=$reSize ? $style : '';?>">
                                 <?=$value[$i];?>
                             </li>
-                            <?php 
+                            <?php
                                 }
                             } ?>
                     </ul>
                 </li>
-                <?php 
+                <?php
                 }
             }else{
                 ?>
                 <li class="seccion-menu-option" params="<?=strtolower($key);?>">
-                    <a href="#"><?=$key?></a>
-                </li>                
+                    <a href="#">
+                        <span class="nav-ico"><?=mb_strtoupper(mb_substr($key, 0, 2))?></span>
+                        <?=$key?>
+                    </a>
+                </li>
                 <?php
             }
         }
-     
+
     ?>
 </ul>
