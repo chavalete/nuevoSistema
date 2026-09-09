@@ -475,14 +475,12 @@ div#modal input:focus, div#modal textarea:focus, div#modal select:focus{
     border-color: var(--accent) !important;
     outline: none;
 }
-/* Cuando se edita una fila de una tabla (Detalles), queremos que se note
-   bien CUÁL fila es (fondo celeste + borde de acento a la izquierda),
-   pero con los inputs de adentro prolijos y blancos para que se puedan
-   leer — si el relleno celeste se lo ponemos a cada input suelto, se
-   acumulan y termina siendo ruido en vez de una señal clara. */
+/* Cuando se edita una fila de una tabla (Detalles), se marca solo esa
+   fila (no las demás) con un contorno fino, sin rellenar de color ni
+   poner una barra al costado — más liviano que la versión anterior. */
 div#modal tr.detalles-dato:has(input){
-    background: var(--accent-soft) !important;
-    box-shadow: inset 4px 0 0 var(--accent);
+    background: var(--surface) !important;
+    box-shadow: inset 0 0 0 1.5px var(--accent);
 }
 div#modal tr.detalles-dato input, div#modal tr.detalles-dato select{
     background: var(--surface) !important;
