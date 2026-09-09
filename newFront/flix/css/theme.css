@@ -381,11 +381,11 @@ table#grid-content{
 .grid-datos td{ padding: .6rem .5rem; border-bottom: 1px solid var(--border); }
 .grid-datos:hover, .grid-datos.par:hover{ background-color: var(--surface-2) !important; }
 .grid-datos.par{ background-color: var(--surface-2) !important; }
-/* La columna por la que se está ordenando se resalta un poco, pero
-   respetando el intercalado de la fila (antes quedaba todo el mismo gris
-   parejo, sin importar la fila, y se perdía el efecto cebra) */
-tr.grid-datos td.sorted-impar{ background-color: color-mix(in srgb, var(--surface) 85%, var(--accent) 15%) !important; }
-tr.grid-datos td.sorted-par{ background-color: color-mix(in srgb, var(--surface-2) 85%, var(--accent) 15%) !important; }
+/* La columna por la que se está ordenando NO se resalta: queda igual que
+   el resto de las columnas de esa misma fila (antes se pintaba todo el
+   mismo gris parejo sin importar la fila, y se perdía el efecto cebra) */
+tr.grid-datos td.sorted-impar{ background-color: var(--surface) !important; }
+tr.grid-datos td.sorted-par{ background-color: var(--surface-2) !important; }
 div.fieldSorter{ background-color: transparent; }
 
 div#flix-bottom{
