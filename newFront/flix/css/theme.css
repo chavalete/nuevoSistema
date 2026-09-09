@@ -475,6 +475,18 @@ div#modal input:focus, div#modal textarea:focus, div#modal select:focus{
     border-color: var(--accent) !important;
     outline: none;
 }
+/* Cuando se edita una fila de una tabla (Detalles), varias celdas se
+   vuelven inputs a la vez y el relleno celeste de cada una se suma y
+   termina resaltando toda la fila de más. Ahí los dejamos más sutiles
+   (blancos con borde), reservando el relleno celeste para los
+   formularios de búsqueda, que es donde se ve bien. */
+div#modal tr.detalles-dato input, div#modal tr.detalles-dato select{
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+}
+div#modal tr.detalles-dato input:focus, div#modal tr.detalles-dato select:focus{
+    border-color: var(--accent) !important;
+}
 div#modal input.error, table#grid-content input.error{
     background: var(--critical-soft) !important;
     border: 1px solid var(--critical) !important;
