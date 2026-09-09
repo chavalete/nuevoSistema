@@ -476,9 +476,13 @@ div#modal input:focus, div#modal textarea:focus, div#modal select:focus{
     outline: none;
 }
 /* Cuando se edita una fila de una tabla (Detalles), se marca solo esa
-   fila (no las demás) con un contorno fino, sin rellenar de color ni
-   poner una barra al costado — más liviano que la versión anterior. */
-div#modal tr.detalles-dato:has(input){
+   fila con un contorno fino (sin rellenar de color ni barra lateral).
+   Usamos la clase "fila-editando" (la agrega/saca detalles.php al
+   mostrar/ocultar los inputs de esa fila puntual) en vez de ":has(input)",
+   porque el <input> de cada celda editable siempre existe en el HTML
+   (solo se oculta con display:none hasta tocar el lápiz), así que
+   ":has(input)" marcaba TODAS las filas por igual, no solo la editada. */
+div#modal tr.detalles-dato.fila-editando{
     background: var(--surface) !important;
     box-shadow: inset 0 0 0 1.5px var(--accent);
 }

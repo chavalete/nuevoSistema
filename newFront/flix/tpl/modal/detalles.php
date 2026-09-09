@@ -226,6 +226,8 @@ if(!empty($_POST['autogestion'])){
 
         $('div.detalle-editar', 'div.detalles-table').show();
         $('div.detalle-dato.editable', 'div.detalles-table').show();
+
+        $('tr.detalles-dato', 'div.detalles-table').removeClass('fila-editando');
     }
     $('div.detalle-editar', 'tr.detalles-dato').click(function(){
         ocultarEdits();
@@ -252,6 +254,7 @@ if(!empty($_POST['autogestion'])){
         $('div.detalle-editar', trContent).hide();
         $('div.detalle-input', trContent).show();
         $('div.herramientasEdit-detalle', trContent).show();
+        trContent.addClass('fila-editando');
     });
 
     $('div.editTool-detalle.cancel').click(function(){
@@ -260,6 +263,7 @@ if(!empty($_POST['autogestion'])){
         $('div.herramientasEdit-detalle', trContent).hide();
         $('div.detalle-dato', trContent).show();
         $('div.detalle-editar', trContent).show();
+        trContent.removeClass('fila-editando');
     });
 
     // --- DETECTAMOS LA COLUMNA DE CANT_INGRESO POR PHP ---
