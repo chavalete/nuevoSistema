@@ -619,18 +619,18 @@ div.detalles-cabecera table{
     box-shadow: var(--shadow);
 }
 td.cabecera-title, td.cabecera-title-blue{
-    background: var(--surface-3) !important;
-    color: var(--text-muted) !important;
+    background: var(--accent) !important;
+    color: var(--accent-contrast) !important;
     font-size: .78rem;
     font-weight: 700;
     padding: .65rem .9rem !important;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--surface);
 }
 td.cabecera-detalle, td.cabecera-detalle-blue{
-    background: var(--surface) !important;
+    background: var(--accent-soft) !important;
     color: var(--text) !important;
     padding: .65rem .9rem !important;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--surface);
 }
 div.detalles-cabecera table tr:last-child td{ border-bottom: none; }
 div.detalles-table{
