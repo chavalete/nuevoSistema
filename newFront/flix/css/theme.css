@@ -327,21 +327,21 @@ div#flix_botonera{
 }
 .flix_boton{
     margin: 3px;
-    padding: .4rem .75rem;
-    border-radius: 6px;
-    background: var(--surface-2);
-    border: 1px solid var(--border);
+    padding: .5rem .9rem;
+    border-radius: 10px;
+    background: var(--accent);
+    border: 1px solid var(--accent);
 }
-.flix_boton:hover{ border-color: var(--accent); }
+.flix_boton:hover{ background: var(--accent-strong); border-color: var(--accent-strong); }
 span.texto_boton{
     font-family: 'Public Sans', Arial, sans-serif;
     font-size: .8rem;
     font-weight: 600;
-    color: var(--text);
+    color: var(--accent-contrast) !important;
     background-image: none !important;
     padding-left: 0 !important;
 }
-span.texto_boton:hover{ color: var(--accent); }
+span.texto_boton:hover{ color: var(--accent-contrast) !important; }
 div.flix-separator{ border-left: 1px solid var(--border); border-right: none; margin: 0 6px !important; }
 div#globalTools{ display: flex; align-items: center; }
 
