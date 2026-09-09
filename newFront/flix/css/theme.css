@@ -640,8 +640,8 @@ div.detalles-table{
     box-shadow: var(--shadow);
 }
 th.detalles-titulo, th.detalles-titulo-dark{
-    background: var(--surface-3) !important;
-    color: var(--text-muted) !important;
+    background: var(--accent) !important;
+    color: var(--accent-contrast) !important;
     font-size: .72rem;
     font-weight: 700;
     text-transform: uppercase;
