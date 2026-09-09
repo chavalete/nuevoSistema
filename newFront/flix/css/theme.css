@@ -604,3 +604,48 @@ div#flix-paginador div.next{ -webkit-mask-image: var(--icon-chev-right); mask-im
 div#flix-paginador div.last{ -webkit-mask-image: var(--icon-chev-dright); mask-image: var(--icon-chev-dright); }
 div.fieldSorter div.asc, div.fieldSorter div.asc-hover{ -webkit-mask-image: var(--icon-chev-up); mask-image: var(--icon-chev-up); }
 div.fieldSorter div.desc, div.fieldSorter div.desc-hover{ -webkit-mask-image: var(--icon-chev-down); mask-image: var(--icon-chev-down); }
+
+/* ================= PANTALLA DE DETALLES (tpl/modal/detalles.php) =================
+   Esta pantalla (la que abre la lupa "detalles") usa sus propias clases con
+   colores puestos a mano (cabecera-title/cabecera-detalle, detalles-titulo,
+   detalles-dato), separadas de las genéricas de grilla/modal, así que no
+   quedaban alcanzadas por el resto del tema. Mismo criterio: solo colores/
+   tipografía, no toca la lógica de edición/alertar/bloquear. */
+div.detalles-cabecera table{ border: 1px solid var(--border); border-radius: 8px; overflow: hidden; border-collapse: separate; }
+td.cabecera-title, td.cabecera-title-blue{
+    background: var(--surface-2) !important;
+    color: var(--text-muted) !important;
+    font-size: .8rem;
+    font-weight: 700;
+    border-bottom: 1px solid var(--border);
+}
+td.cabecera-detalle, td.cabecera-detalle-blue{
+    background: var(--surface) !important;
+    color: var(--text) !important;
+    border-bottom: 1px solid var(--border);
+}
+div.detalles-table{
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: auto;
+}
+th.detalles-titulo, th.detalles-titulo-dark{
+    background: var(--surface-3) !important;
+    color: var(--text-muted) !important;
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    border: none !important;
+}
+tr.detalles-dato, tr.detalles-dato-blue{ font-size: .85rem; color: var(--text); }
+tr.detalles-dato td, tr.detalles-dato-blue td{ border-bottom: 1px solid var(--border); }
+tr.detalles-dato.par, tr.detalles-dato-blue.par{ background: var(--surface-2) !important; color: var(--text) !important; }
+tr.detalles-dato.impar, tr.detalles-dato-blue.impar{ background: var(--surface) !important; }
+tr.detalles-dato.bloqueado_par, tr.detalles-dato.bloqueado_impar{
+    background: var(--critical-soft) !important;
+    color: var(--text) !important;
+}
+tr.detalles-dato.alertado_par, tr.detalles-dato.alertado_impar{
+    background: var(--warning-soft) !important;
+    color: var(--text) !important;
+}
