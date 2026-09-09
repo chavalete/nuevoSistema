@@ -24,7 +24,7 @@
 <div id="topbar">
     <button type="button" id="sidebarToggle" class="hamburger" title="Contraer menú" aria-label="Contraer menú"><span></span></button>
     <div id="topbar-title"></div>
-    <button type="button" id="themeToggle" class="theme-toggle" title="Cambiar a modo claro" aria-label="Cambiar a modo claro"></button>
+    <button type="button" id="themeToggle" class="theme-toggle" title="Cambiar a modo oscuro" aria-label="Cambiar a modo oscuro"></button>
     <div class="logout-contenedor">
         <p class="logout-usuario">
             <?php echo $_SESSION['usuarioNombre']; ?>
