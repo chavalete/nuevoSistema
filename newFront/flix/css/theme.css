@@ -539,15 +539,39 @@ div.fieldSorter div.asc-hover, div.fieldSorter div.desc-hover{
     -webkit-mask-size: contain; mask-size: contain;
     transition: background-color .1s ease;
 }
-div.herramienta:hover, div.editTool:hover, div.detalle-cabecera-editar:hover,
-div.detalle-editar:hover, div.herramienta-alertar:hover, div.herramienta-imprimirDetalle:hover,
-div.herramienta-bloquear:hover, div.addButton:hover, div.eliminar:hover,
-div.editTool-detalles:hover, div.editTool-detalle:hover,
 div#flix-paginador div.bottom-button:hover, div#flix-actualizar:hover,
 div.fieldSorter div.asc:hover, div.fieldSorter div.desc:hover{
     background-color: var(--accent) !important;
 }
 div#flix-paginador .opacity{ background-color: var(--text-muted) !important; }
+
+/* Un poco de color con sentido semántico (no un color por ícono al azar):
+   verde = altas/confirmar, rojo = eliminar/cancelar, ámbar = alertar,
+   celeste = el resto (acciones de navegación/consulta habituales). El
+   hover ilumina el mismo color en vez de saltar a otro (evita que
+   "eliminar" se vuelva azul al pasar el mouse, por ejemplo). */
+div.herramienta.editable, div.detalle-cabecera-editar, div.detalle-editar,
+div.herramienta.detalles, div.herramienta.detallesEntradas, div.herramienta.detallesTransacciones,
+div.herramienta.imprimir, div.herramienta.imprimirRemito, div.herramienta.imprimirCodigo, div.herramienta-imprimirDetalle,
+div.herramienta.mostrador, div.herramienta.mostradorEntradas, div.herramienta.autogestion,
+div.herramienta.transacciones, div.herramienta.enviarTransaccion, div.herramienta-bloquear{
+    background-color: var(--accent) !important;
+}
+div.editTool.acept, div.editTool-detalles.acept, div.editTool-detalle.acept, div.addButton{
+    background-color: var(--success) !important;
+}
+div.herramienta.cancelable, div.herramienta.cancelableBloqueador, div.editTool.cancel,
+div.editTool-detalles.cancel, div.editTool-detalle.cancel, div.eliminar{
+    background-color: var(--critical) !important;
+}
+div.herramienta-alertar{ background-color: var(--warning) !important; }
+
+div.herramienta:hover, div.editTool:hover, div.detalle-cabecera-editar:hover,
+div.detalle-editar:hover, div.herramienta-alertar:hover, div.herramienta-imprimirDetalle:hover,
+div.herramienta-bloquear:hover, div.addButton:hover, div.eliminar:hover,
+div.editTool-detalles:hover, div.editTool-detalle:hover{
+    filter: brightness(1.2);
+}
 
 div.herramienta.editable, div.detalle-cabecera-editar, div.detalle-editar{ -webkit-mask-image: var(--icon-editar); mask-image: var(--icon-editar); }
 div.herramienta.detalles, div.herramienta.detallesEntradas, div.herramienta.detallesTransacciones{ -webkit-mask-image: var(--icon-detalles); mask-image: var(--icon-detalles); }
