@@ -611,36 +611,50 @@ div.fieldSorter div.desc, div.fieldSorter div.desc-hover{ -webkit-mask-image: va
    detalles-dato), separadas de las genéricas de grilla/modal, así que no
    quedaban alcanzadas por el resto del tema. Mismo criterio: solo colores/
    tipografía, no toca la lógica de edición/alertar/bloquear. */
-div.detalles-cabecera table{ border: 1px solid var(--border); border-radius: 8px; overflow: hidden; border-collapse: separate; }
+div.detalles-cabecera table{
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    border-collapse: separate;
+    box-shadow: var(--shadow);
+}
 td.cabecera-title, td.cabecera-title-blue{
-    background: var(--surface-2) !important;
+    background: var(--surface-3) !important;
     color: var(--text-muted) !important;
-    font-size: .8rem;
+    font-size: .78rem;
     font-weight: 700;
+    padding: .65rem .9rem !important;
     border-bottom: 1px solid var(--border);
 }
 td.cabecera-detalle, td.cabecera-detalle-blue{
     background: var(--surface) !important;
     color: var(--text) !important;
+    padding: .65rem .9rem !important;
     border-bottom: 1px solid var(--border);
 }
+div.detalles-cabecera table tr:last-child td{ border-bottom: none; }
 div.detalles-table{
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 10px;
     overflow: auto;
+    box-shadow: var(--shadow);
 }
 th.detalles-titulo, th.detalles-titulo-dark{
     background: var(--surface-3) !important;
     color: var(--text-muted) !important;
     font-size: .72rem;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: .04em;
+    padding: .6rem .7rem !important;
     border: none !important;
 }
 tr.detalles-dato, tr.detalles-dato-blue{ font-size: .85rem; color: var(--text); }
-tr.detalles-dato td, tr.detalles-dato-blue td{ border-bottom: 1px solid var(--border); }
-tr.detalles-dato.par, tr.detalles-dato-blue.par{ background: var(--surface-2) !important; color: var(--text) !important; }
+tr.detalles-dato td, tr.detalles-dato-blue td{ padding: .55rem .7rem !important; border-bottom: 1px solid var(--border); }
+tr.detalles-dato:last-child td{ border-bottom: none; }
+tr.detalles-dato.par, tr.detalles-dato-blue.par{ background: var(--surface-3) !important; color: var(--text) !important; }
 tr.detalles-dato.impar, tr.detalles-dato-blue.impar{ background: var(--surface) !important; }
+tr.detalles-dato:hover{ background: var(--accent-soft) !important; }
 tr.detalles-dato.bloqueado_par, tr.detalles-dato.bloqueado_impar{
     background: var(--critical-soft) !important;
     color: var(--text) !important;
