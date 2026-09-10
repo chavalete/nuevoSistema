@@ -686,3 +686,40 @@ tr.detalles-dato.alertado_par, tr.detalles-dato.alertado_impar{
     background: var(--warning-soft) !important;
     color: var(--text) !important;
 }
+
+/* ================= AUTOCOMPLETAR (jQuery UI) =================
+   El desplegable de autocompletar (usado en varios formularios y en
+   celdas editables de tablas) es un widget de jQuery UI con su propio
+   CSS (jQueryUI.css) sin tocar — acá solo pisamos colores/tipografía de
+   las clases que arma ese widget, sin tocar el plugin ni su JS. */
+.ui-autocomplete.ui-widget-content{
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    padding: 4px !important;
+    font-family: 'Public Sans', Tahoma, Arial, sans-serif;
+}
+.ui-autocomplete .ui-menu-item{
+    background: transparent !important;
+    background-image: none !important;
+}
+.ui-autocomplete .ui-menu-item a{
+    color: var(--text) !important;
+    padding: .45rem .6rem !important;
+    border-radius: 6px;
+    font-size: .85rem;
+}
+.ui-autocomplete .ui-state-hover,
+.ui-autocomplete .ui-state-focus,
+.ui-autocomplete .ui-state-active{
+    background: var(--accent) !important;
+    background-image: none !important;
+    border: none !important;
+    color: var(--accent-contrast) !important;
+}
+.ui-autocomplete .ui-state-hover a,
+.ui-autocomplete .ui-state-focus a,
+.ui-autocomplete .ui-state-active a{
+    color: var(--accent-contrast) !important;
+}
