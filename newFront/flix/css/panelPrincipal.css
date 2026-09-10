@@ -15,6 +15,17 @@ html[data-theme="oscuro"]{
     --grid-line: rgba(237,242,247,.08);
 }
 
+/* generic.css trae "* { margin: auto; }": sin este reset, cualquier hijo de
+   un contenedor flex/grid (tarjetas KPI, gráficos, filas del drawer, etc.)
+   se encoge a su contenido en vez de ocupar el ancho de su columna, y todo
+   queda descuadrado. Mismo problema/arreglo que .nav-ico en theme.css. */
+#panelPrincipal,
+#panelPrincipal *,
+.pp-scrim, .pp-drawer, .pp-drawer *,
+.pp-modal-scrim, .pp-modal-scrim *{
+    margin: 0;
+}
+
 #panelPrincipal{ max-width:1320px; margin:0 auto; }
 
 #panelPrincipal .example-badge{
