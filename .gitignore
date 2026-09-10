@@ -1,0 +1,13 @@
+# Credenciales y material criptográfico: nunca deben subirse al repo.
+# (almacenamiento.ini con la password real de la base, y las claves/
+# certificados de AFIP, quedaron expuestos por error en un import
+# anterior — ver commit de limpieza. Esto evita que se repita.)
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+*.cer
+almacenamiento.ini
+almacenamiento.ini~
+**/afipPropia/
