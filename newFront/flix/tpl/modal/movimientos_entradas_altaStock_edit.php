@@ -286,7 +286,7 @@
         var tdProd  = '<td params="'+p.id+'">'+p.label+'</td>';
         var tdCant  = '<td class="cant" style="width: 120px;" params="'+p.cantidad+'"><input type="number" style="width: 100px;" class="editableCount" value="'+p.cantidad+'" /></td>';
         var tdPU    = '<td class="pu">'+p.costo+'</td>';
-        var tdPT    = '<td class="pt" value="'+Math.round((p.costo * p.cantidad) * 100) / 100+'">'+Math.round((p.costo * p.cantidad) * 100) / 100+'</td>';
+        var tdPT    = '<td class="pt" value="'+(p.costo * p.cantidad).toFixed(2)+'">'+(p.costo * p.cantidad).toFixed(2)+'</td>';
         var tdVenc  = '<td class="vencimiento-td" data-vencimiento="'+currentVencimiento+'">'+currentVencimiento+'</td>';
         var tr;
 

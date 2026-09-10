@@ -184,7 +184,7 @@
         var tdCantResumen = '<td class="cant_resument">'+$('input[name=cantidad]').val()+'</td>';
         var tdCosto = '<td params="'+$('input[name=productoPcosto]').val()+'"><input type="number" style="width: 100px;" class="editablePrice" value="'+$('input[name=productoPcosto]').val()+'" /></td>';
         var tdCostoResumen = '<td class="costo_resumen">'+$('input[name=productoPcosto]').val()+'</td>';
-        var tdCosto2 = '<td class="pt">'+(Math.round((parseFloat($('input[name=productoPcosto]').val()) * parseFloat($('input[name=cantidad]').val())) * 100) / 100)+'</td>';
+        var tdCosto2 = '<td class="pt">'+((parseFloat($('input[name=productoPcosto]').val()) * parseFloat($('input[name=cantidad]').val())).toFixed(2))+'</td>';
         var tdVenc = '<td params="'+$('input[name=vencimiento]').val()+'">'+$('input[name=vencimiento]').val()+'</td>';
         var tdSupr = '<td class="eliminar"><div class="eliminar" title="Quitar"></div></td>';
         var tr;
