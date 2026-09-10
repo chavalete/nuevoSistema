@@ -1,6 +1,14 @@
-<?php 
+<?php
+// El Panel Principal (Tablero) no usa esta grilla genérica: tiene su propia
+// pantalla en panelPrincipal.php. Si el autoload inicial de flix.js llega
+// hasta acá con este tipo (por ejemplo, al volver a esa sección desde otra
+// parte del menú), no hacemos nada.
+if(!empty($_POST['parametros']['tipo']) && $_POST['parametros']['tipo'] === 'principal'){
+    exit;
+}
+
 include('../../inc/master_header.php');
-include('../../inc/process.php'); 
+include('../../inc/process.php');
 
 // Levanto los datos del config.ini
 $datosSeccion = ParseINI::getConfig($seccion);

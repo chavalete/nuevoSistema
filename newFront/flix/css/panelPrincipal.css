@@ -1,0 +1,191 @@
+/* ==========================================================================
+   Panel Principal (Tablero) — pantalla nueva, datos de ejemplo por ahora
+   (sin AJAX todavía). Reutiliza los tokens de color/tipografía definidos en
+   theme.css (carga antes que este archivo vía cfg/config.ini), así que
+   respeta el toggle claro/oscuro existente sin lógica extra. Acá solo se
+   agregan las dos variables que faltan (series-2, grid-line, para los
+   gráficos) y los componentes propios de esta pantalla.
+   ========================================================================== */
+:root{
+    --series-2: #B0293D;
+    --grid-line: rgba(23,33,43,.07);
+}
+html[data-theme="oscuro"]{
+    --series-2: #E0486B;
+    --grid-line: rgba(237,242,247,.08);
+}
+
+#panelPrincipal{ max-width:1320px; margin:0 auto; }
+
+#panelPrincipal .example-badge{
+    font:700 .66rem 'Public Sans', Arial, sans-serif; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--warning); background:var(--warning-soft); padding:5px 9px; border-radius:6px;
+    display:inline-block; margin:0 0 16px;
+}
+
+/* ---------- selector de fecha (visual, todavía no recalcula nada) ---------- */
+#panelPrincipal .range{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:0 0 20px; }
+#panelPrincipal .range-chip{
+    font:600 .72rem 'Public Sans', Arial, sans-serif; padding:7px 11px; border-radius:999px;
+    border:1px solid var(--border); background:var(--surface-2); color:var(--text-muted); cursor:pointer;
+}
+#panelPrincipal .range-chip.active{ background:var(--accent-soft); color:var(--accent); border-color:transparent; }
+#panelPrincipal .range input[type="date"]{
+    font:600 .76rem 'Public Sans', Arial, sans-serif; color:var(--text);
+    background:var(--surface-2); border:1px solid var(--border); border-radius:8px;
+    padding:6px 8px; color-scheme: light dark;
+}
+
+/* ---------- secciones ---------- */
+#panelPrincipal .section{ margin:0 0 40px; }
+#panelPrincipal .section-head{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin:0 0 14px; }
+#panelPrincipal .section-title{
+    font:700 .72rem 'Public Sans', Arial, sans-serif; text-transform:uppercase; letter-spacing:.09em; color:var(--text-muted);
+}
+#panelPrincipal .section-note{ font-size:.78rem; color:var(--text-muted); }
+
+/* ---------- banda de KPIs ---------- */
+#panelPrincipal .kpi-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:14px; }
+#panelPrincipal .kpi{
+    background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    box-shadow:var(--shadow); padding:20px 20px 16px; display:flex; flex-direction:column; gap:10px;
+}
+#panelPrincipal .kpi-top{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
+#panelPrincipal .kpi-top-click{ cursor:pointer; }
+#panelPrincipal .kpi-top-click:hover .kpi-label{ color:var(--accent); }
+#panelPrincipal .kpi-label{ font:700 .68rem 'Public Sans', Arial, sans-serif; text-transform:uppercase; letter-spacing:.06em; color:var(--text-muted); }
+#panelPrincipal .kpi-value{ font-family:'Archivo', Arial, sans-serif; font-weight:800; font-size:2rem; letter-spacing:-.02em; font-variant-numeric: tabular-nums; color:var(--text); }
+#panelPrincipal .kpi-delta{ font:600 .76rem 'Public Sans', Arial, sans-serif; display:flex; align-items:center; gap:4px; }
+#panelPrincipal .kpi-delta.up{ color:var(--success); } #panelPrincipal .kpi-delta.down{ color:var(--critical); }
+#panelPrincipal .kpi-spark{ width:100%; height:40px; display:block; }
+#panelPrincipal .kpi-bars{ display:flex; height:6px; border-radius:4px; overflow:hidden; cursor:pointer; }
+#panelPrincipal .kpi-bars span{ height:100%; transition:filter .1s ease; }
+#panelPrincipal .kpi-bars:hover span{ filter:brightness(1.12); }
+#panelPrincipal .kpi-legend{ display:flex; gap:12px; font-size:.68rem; color:var(--text-muted); flex-wrap:wrap; }
+#panelPrincipal .kpi-legend i{ width:7px; height:7px; border-radius:2px; display:inline-block; margin-right:4px; }
+
+#panelPrincipal .kpi-submetrics{ display:flex; margin-top:2px; padding-top:12px; border-top:1px solid var(--border); }
+#panelPrincipal .kpi-submetric{ flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; }
+#panelPrincipal .kpi-submetric + .kpi-submetric{ border-left:1px solid var(--border); padding-left:14px; margin-left:14px; }
+#panelPrincipal .kpi-submetric.clickable{ cursor:pointer; }
+#panelPrincipal .kpi-submetric.clickable:hover .kpi-sub-label,
+#panelPrincipal .kpi-submetric.clickable:hover .kpi-sub-value{ color:var(--accent); }
+#panelPrincipal .kpi-sub-label{ font:700 .62rem 'Public Sans', Arial, sans-serif; text-transform:uppercase; letter-spacing:.05em; color:var(--text-muted); }
+#panelPrincipal .kpi-sub-value{
+    font-family:'Archivo', Arial, sans-serif; font-weight:700; font-size:1.05rem; font-variant-numeric:tabular-nums;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--text);
+}
+#panelPrincipal .kpi-sub-delta{ font:600 .68rem 'Public Sans', Arial, sans-serif; }
+#panelPrincipal .kpi-sub-delta.up{ color:var(--success); } #panelPrincipal .kpi-sub-delta.down{ color:var(--critical); }
+
+/* ---------- gráficos ---------- */
+#panelPrincipal .charts-row{ display:grid; grid-template-columns:1.7fr 1fr; gap:14px; }
+#panelPrincipal .panel{
+    background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    box-shadow:var(--shadow); padding:20px;
+}
+#panelPrincipal .panel h3{ font-family:'Archivo', Arial, sans-serif; font-size:.92rem; font-weight:700; margin:0 0 14px; display:flex; align-items:center; gap:8px; color:var(--text); }
+#panelPrincipal .panel h3 .dot{ width:7px; height:7px; border-radius:2px; background:var(--accent); display:inline-block; }
+#panelPrincipal .panel .chart-box{ position:relative; height:260px; }
+#panelPrincipal .panel .chart-box.small{ height:220px; }
+
+/* ---------- tablas ---------- */
+#panelPrincipal .tables-row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+#panelPrincipal .table-wrap{ overflow-x:auto; }
+#panelPrincipal table{ width:100%; border-collapse:collapse; min-width:460px; }
+#panelPrincipal thead th{
+    text-align:left; font:700 .66rem 'Public Sans', Arial, sans-serif; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--text-muted); padding:0 10px 10px; border-bottom:1px solid var(--border); white-space:nowrap;
+}
+#panelPrincipal tbody td{ padding:11px 10px; font-size:.86rem; border-bottom:1px solid var(--border); white-space:nowrap; font-variant-numeric: tabular-nums; color:var(--text); }
+#panelPrincipal tbody tr:last-child td{ border-bottom:none; }
+#panelPrincipal td.num{ text-align:right; }
+#panelPrincipal td.name{ font-weight:600; }
+#panelPrincipal tbody tr.row-click{ cursor:pointer; }
+#panelPrincipal tbody tr.row-click:hover td{ background:var(--surface-2); }
+#panelPrincipal .pill{ display:inline-flex; align-items:center; gap:5px; font:700 .66rem 'Public Sans', Arial, sans-serif; padding:4px 9px; border-radius:999px; text-transform:uppercase; letter-spacing:.03em; }
+#panelPrincipal .pill i{ width:6px; height:6px; border-radius:50%; }
+#panelPrincipal .pill.ok{ background:var(--success-soft); color:var(--success); } #panelPrincipal .pill.ok i{ background:var(--success); }
+#panelPrincipal .pill.warn{ background:var(--warning-soft); color:var(--warning); } #panelPrincipal .pill.warn i{ background:var(--warning); }
+#panelPrincipal .pill.bad{ background:var(--critical-soft); color:var(--critical); } #panelPrincipal .pill.bad i{ background:var(--critical); }
+
+#panelPrincipal .foot{ margin-top:30px; text-align:center; font-size:.74rem; color:var(--text-muted); }
+
+/* ---------- drill-down: drawer lateral ---------- */
+.pp-scrim{
+    position:fixed; inset:0; background:rgba(6,10,14,.5); backdrop-filter:blur(1px);
+    opacity:0; pointer-events:none; transition:opacity .18s ease; z-index:80;
+}
+.pp-scrim.open{ opacity:1; pointer-events:auto; }
+.pp-drawer{
+    position:fixed; top:0; right:0; height:100vh; width:min(440px, 100vw);
+    background:var(--surface); border-left:1px solid var(--border); box-shadow:var(--shadow);
+    transform:translateX(100%); transition:transform .22s ease; z-index:90;
+    display:flex; flex-direction:column;
+}
+.pp-drawer.open{ transform:translateX(0); }
+.pp-drawer-head{
+    display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+    padding:20px 20px 16px; border-bottom:1px solid var(--border);
+}
+.pp-drawer-head h4{ font-family:'Archivo', Arial, sans-serif; font-size:1rem; font-weight:700; margin:0 0 4px; color:var(--text); }
+.pp-drawer-head p{ margin:0; font-size:.78rem; color:var(--text-muted); }
+.pp-drawer-close{
+    flex:none; width:30px; height:30px; border-radius:8px; border:1px solid var(--border);
+    background:var(--surface-2); color:var(--text-muted); cursor:pointer; font-size:1rem; line-height:1;
+}
+.pp-drawer-body{ flex:1; overflow-y:auto; padding:8px 12px 20px; }
+.pp-drawer-row{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:12px 8px; border-bottom:1px solid var(--border); cursor:pointer; border-radius:8px;
+}
+.pp-drawer-row:hover{ background:var(--surface-2); }
+.pp-drawer-row.static{ cursor:default; }
+.pp-drawer-row.static:hover{ background:transparent; }
+.pp-drawer-row .who{ font-weight:600; font-size:.86rem; color:var(--text); }
+.pp-drawer-row .meta{ font-size:.72rem; color:var(--text-muted); margin-top:2px; }
+.pp-drawer-row .amt{ text-align:right; font-variant-numeric:tabular-nums; font-weight:700; font-size:.88rem; color:var(--text); }
+.pp-drawer-row .amt .days{ display:block; font-size:.68rem; font-weight:600; margin-top:2px; }
+.pp-dim-switch{ display:flex; gap:2px; padding:3px; background:var(--surface-2); border:1px solid var(--border); border-radius:999px; margin:4px 8px 14px; }
+.pp-dim-switch button{ flex:1; border:none; background:transparent; color:var(--text-muted); font:600 .72rem 'Public Sans', Arial, sans-serif; padding:7px 8px; border-radius:999px; cursor:pointer; }
+.pp-dim-switch button.active{ background:var(--accent); color:var(--accent-contrast); }
+
+/* ---------- drill-down: modal de comprobante/producto ---------- */
+.pp-modal-scrim{
+    position:fixed; inset:0; background:rgba(6,10,14,.6);
+    display:flex; align-items:center; justify-content:center; padding:24px;
+    opacity:0; pointer-events:none; transition:opacity .15s ease; z-index:100;
+}
+.pp-modal-scrim.open{ opacity:1; pointer-events:auto; }
+.pp-modal-box{
+    width:min(520px, 100%); max-height:85vh; overflow-y:auto;
+    background:var(--surface); border-radius:14px; box-shadow:var(--shadow);
+    transform:scale(.97); transition:transform .15s ease;
+}
+.pp-modal-scrim.open .pp-modal-box{ transform:scale(1); }
+.pp-modal-head{
+    background:var(--accent); color:var(--accent-contrast); padding:16px 22px; border-radius:14px 14px 0 0;
+    display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+}
+.pp-modal-head h4{ font-family:'Archivo', Arial, sans-serif; font-size:1rem; margin:0 0 3px; }
+.pp-modal-head p{ margin:0; font-size:.78rem; opacity:.85; }
+.pp-modal-close{
+    flex:none; width:28px; height:28px; border-radius:7px; border:none;
+    background:rgba(255,255,255,.18); color:inherit; cursor:pointer; font-size:1rem;
+}
+.pp-modal-kv{ padding:16px 22px 4px; display:grid; grid-template-columns:1fr 1fr; gap:10px 16px; }
+.pp-modal-kv div span{ display:block; }
+.pp-modal-kv .k{ font-size:.66rem; text-transform:uppercase; letter-spacing:.05em; color:var(--text-muted); font-weight:700; margin-bottom:3px; }
+.pp-modal-kv .v{ font-size:.86rem; font-weight:600; font-variant-numeric:tabular-nums; color:var(--text); }
+.pp-modal-items{ margin:16px 22px 22px; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+.pp-modal-items table{ min-width:0; }
+.pp-modal-items th{ background:var(--surface-3); padding:8px 10px; font-size:.64rem; }
+.pp-modal-items td{ padding:9px 10px; font-size:.8rem; }
+.pp-modal-items tr:last-child td{ border-bottom:none; }
+
+@media (max-width:900px){
+    #panelPrincipal .charts-row, #panelPrincipal .tables-row{ grid-template-columns:1fr; }
+}
+@media (max-width:480px){
+    #panelPrincipal .kpi-value{ font-size:1.6rem; }
+}

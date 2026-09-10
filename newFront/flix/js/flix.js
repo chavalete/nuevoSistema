@@ -243,6 +243,12 @@ var Flix = (function(){
         });
         // Cambio de seccion
         $('li.menu-option, li.seccion-menu-option', 'ul.menu').click(function(){
+            // El Panel Principal (Tablero) tiene su propia pantalla, no pasa
+            // por la grilla genérica: navegación normal en vez de AJAX.
+            if($(this).attr('params') === 'principal'){
+                window.location.href = 'panelPrincipal.php';
+                return;
+            }
             flixResetValues();
             window.parametros.tipo = $(this).attr('params');
             loadFlix();
