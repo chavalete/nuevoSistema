@@ -1,0 +1,468 @@
+<div id="modal" class="inicio">
+    <div class="modal_title">
+        <span class="title">Pedidos</span>
+        <!-- Tooltip -->
+        <div class='tooltip'>
+            <div class="tooltip-position" style='right: 30px; float: right;'>
+                <img class="tooltip-click" src="img/ayuda.png" />
+                <div class="tooltip-content" params="altaStock" style="top: 30px; left: -300px; width: 320px; height: 365px;"></div>
+            </div>
+        </div>
+        <!-- Fin de la Tooltip -->
+    </div>
+    
+    <div class="modal_content">
+        <table>
+            <tr>
+                <td class="primary">
+                    <form class="modal">
+                        <input id="error" type="hidden" value="0" />
+                        <table>
+                            <tr>
+                                <td class="field-name"><span class="field-name">Cliente</span></td>
+                                <td class="field-input"><input type="text" class="autocomplete required" name="clientes"/></td>
+                                <td class="addButton"><div class="addButton crear-clientes" title="Crear cliente"></div></td>
+                            </tr>
+                            <tr style="height: 1px;">
+                                <td style="height: 1px;" colspan="3"><hr style="color: green;"/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <table class="parcial">
+                                        <input id="errorParcial" type="hidden" value="0" />
+                                        <tr>
+                                            <td class="field-name"><span class="field-name">Productos</span></td>
+                                            <td class="field-input"><input type="text" class="autocomplete parcial required" name="productosCant"/></td>
+                                            
+                                        </tr>            
+                                        <tr>
+                                            <td class="field-name"><span class="field-name">Cantidad</span></td>
+                                            <td class="field-input"><input type="text" name="cantidad" class="parcial required"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="field-name"><span class="field-name">Lote</span></td>
+                                            <td class="field-input"><input type="text" name="lote" class="parcial"/></td>
+                                            <td class="addButton"></td>
+                                        </tr>
+                                    </table>
+                                <td>
+                            </tr>
+                            <tr>
+                                <td />
+                                <td><div class="add-button altaStock">Agregar</div></td>
+                                <td />
+                            </tr>
+                            
+                            <tr style="height: 1px;"><td style="height: 1px;" colspan="3"><hr/></td></tr>
+                            <tr>
+                                <td class="field-name"><span class="field-name">Utilizar dirección del cliente</span></td>
+                                <td class="field-input">
+                                    <select name="direccionCliente">
+					<option value="0">No</option>
+                                        <option value="1">Sí</option>
+                                    </select>
+                                </td>
+                            </tr>                               
+                            <tr>
+                                <td class="field-name"><span class="field-name">Calle</span></td>
+                                <td class="field-input"><input type="text" name="calles" class="required"/></td>
+                                <td class="addButton"></td>
+                            </tr>                        
+                            <tr>
+                                <td class="field-name"><span class="field-name">Altura</span></td>
+                                <td class="field-input"><input type="text" name="alturas" /></td>
+                                <td class="addButton"></td>
+                            </tr>                
+                            <tr>
+                                <td class="field-name"><span class="field-name">Piso</span></td>
+                                <td class="field-input"><input type="text" name="piso" /></td>
+                                <td class="addButton"></td>
+                            </tr>        
+                            <tr>
+                                <td class="field-name"><span class="field-name">Departamento</span></td>
+                                <td class="field-input"><input type="text" name="depto" /></td>
+                                <td class="addButton"></td>
+                            </tr>                
+                            <tr>
+                                <td class="field-name"><span class="field-name">Telefono</span></td>
+                                <td class="field-input"><input type="text" name="telefono" /></td>
+                                <td class="addButton"></td>
+                            </tr>
+                            <tr>
+                                <td class="field-name"><span class="field-name">Codigo Postal</span></td>
+                                <td class="field-input"><input type="text" name="codigoPostal" /></td>
+                                <td class="addButton"></td>
+                            </tr>
+                            <tr>
+                                <td class="field-name"><span class="field-name">Localidad</span></td>
+                                <td class="field-input"><input type="text" class="autocomplete" name="localidades" /></td>
+                                <td class="addButton"></td>
+                            </tr>
+                            <tr>
+                                <td class="field-name"><span class="field-name">Renovaci&oacute;n ID</span></td>
+                                <td class="field-input"><input type="text" name="renovacionId" /></td>
+                                <td class="addButton"></td>
+                            </tr>
+                            <tr>
+				<td class="field-name"><span class="field-name">Observaciones</span></td>
+                                <td class="field-input"><textarea type="text" name="observaciones"></textarea></td>
+        		    </tr>
+                        </table>
+                    </form>
+                </td>
+                
+                <td class="secundary" style="display: none; width: 720px; vertical-align: top;">
+                    <div id="productos">
+                        <table id="productos" align="left" style="width: 700px; margin-left: 10px;">
+                            <thead>
+                                <tr>
+                                    <th class="detalles-titulo-dark">Producto</th>
+                                    <th class="detalles-titulo-dark">Cantidad</th>
+                                    <th class="detalles-titulo-dark">Lote</th>
+                                    <th class="detalles-titulo-dark eliminar" style="width: 15px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </td>                
+            </tr> 
+        </table>
+        <hr class="modal-divisor" />
+        
+        <div class="send-button resumenAltaStock">Confirmar</div>
+    </div>
+</div>
+
+<div id="modal" class="resumen" style="display: none">
+    <div class="modal_title"><span class="title">Alta de stock - Resumen</span></div>
+    
+    <div class="modal_content">
+        <div>
+            <table style="width: 100%;">
+                <tr>
+                    <td class="cabecera-title-blue">Cliente</td>
+                    <td class="cabecera-detalle-blue cliente"></td>
+                </tr>
+                <tr>
+                    <td class="cabecera-title-blue">Renovaci&oacute;n</td>
+                    <td class="cabecera-detalle-blue renovacionId"></td>
+                </tr>
+                <tr>
+                    <td class="cabecera-title-blue">Calle</td>
+                    <td class="cabecera-detalle-blue calle"></td>
+                </tr>            
+                <tr>
+                    <td class="cabecera-title-blue">Altura</td>
+                    <td class="cabecera-detalle-blue alturas"></td>
+                </tr>
+                <tr>
+                    <td class="cabecera-title-blue">Piso</td>
+                    <td class="cabecera-detalle-blue piso"></td>
+                </tr>
+                <tr>
+                    <td class="cabecera-title-blue">Departamento</td>
+                    <td class="cabecera-detalle-blue depto"></td>
+                </tr>
+                <tr>
+                    <td class="cabecera-title-blue">Telefono</td>
+                    <td class="cabecera-detalle-blue telefono"></td>
+                </tr>
+                <tr>
+                    <td class="cabecera-title-blue">Codigo Postal</td>
+                    <td class="cabecera-detalle-blue codigoPostal"></td>
+                </tr>
+                <tr>
+                    <td class="cabecera-title-blue">Localidad</td>
+                    <td class="cabecera-detalle-blue localidades"></td>
+                </tr>
+                <tr>
+                    <td class="cabecera-title-blue">Observaciones</td>
+                    <td class="cabecera-detalle-blue observaciones"></td>
+                </tr>
+            </table>
+            
+        </div>
+        
+        <div style="margin-top: 10px; width: 100%; height: 395px; overflow: auto;">
+            <table id="products_added" style="width: 100%;">
+                <thead>
+                    <th class="detalles-titulo-dark">Producto</th>
+                    <th class="detalles-titulo-dark">Cantidad</th>
+                    <th class="detalles-titulo-dark">Lote</th>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <hr class="modal-divisor" />
+        <div class="send-button volver">Volver</div>        
+        <div class="send-button hacerAltaStock">Hacer alta</div>        
+    </div>
+</div>
+
+<div id="modal" class="nextStep" style="display: none;">
+    <div class="modal_title"><span class="title"></span></div>
+    
+    <div class="modal_content"></div>
+    <hr class="modal-divisor" />
+    <div class="send-button volver-abm">Volver</div>  
+    <div class="send-button crear-volver">Crear y volver</div>    
+</div>
+
+<script type="text/javascript" src="js/modal-nextStep.js"></script>
+<script type="text/javascript">
+    $('div.eliminar', 'table#productos').die();
+    $('div.add-button.altaStock').die();
+    nextStep.Init();
+    
+    window.added = Number(0);
+    var product_count = Number(0);
+    
+    var showSecundary = function(){
+        if($('td.secundary').css('display') == 'none'){
+            $.colorbox.resize({width: '1200'});
+            $('td.secundary').show();
+        }
+            
+        var trClass = 'detalles-dato-blue';
+        var trClassResumen = 'detalles-dato-blue';
+        var tdProd = '<td params="'+$('input[name=productosCant]').attr('params')+'">'+$('input[name=productosCant]').val()+'</td>';
+        var tdCant = '<td params="'+$('input[name=cantidad]').val()+'">'+$('input[name=cantidad]').val()+'</td>';
+        var tdLote = '<td params="'+$('input[name=lote]').val()+'">'+$('input[name=lote]').val()+'</td>';
+        var tdSupr = '<td class="eliminar"><div class="eliminar" title="Quitar"></div></td>';
+        var tr;
+        var trResumen;
+
+        if($('tr', 'table#productos tbody').first().hasClass('par')){
+            trClass += ' impar';
+        }else if($('tr', 'table#productos tbody').first().hasClass('impar')){
+            trClass += ' par';
+        }else{
+            trClass += ' impar';
+        }
+        if($('tr', 'table#products_added tbody').first().hasClass('par')){
+            trClassResumen += ' impar';
+        }else if($('tr', 'table#productos tbody').first().hasClass('impar')){
+            trClassResumen += ' par';
+        }else{
+            trClassResumen += ' impar';
+        }
+            
+        tr = '<tr id="product_'+product_count+'" class="'+trClass+'">' + tdProd + tdCant + tdLote + tdSupr + '</tr>';
+        trResumen = '<tr id="product_'+product_count+'" class="'+trClassResumen+'">' + tdProd + tdCant + tdLote +'</tr>';
+        $('tbody', 'table#productos').prepend(tr);
+        $('tbody', 'table#products_added').prepend(trResumen);
+        window.added += 1;
+        product_count += 1;
+        resetForm();
+                  
+    };
+    var resetForm = function(){
+        $('input[name=productosCant]').val('');
+        $('input[name=productos]').attr('params', '');
+        $('input[name=cantidad]').val('');    
+        $('input[name=lote]').val('');    
+        $('input[name=fechaDesde]').val('');
+        $('input[name=productos]').focus();
+    }
+    var hacerAlta = function(){
+        $('input#errorParcial', 'table.parcial').val('0');
+        $('input#error', 'table.parcial').removeClass('error');
+
+        $('input.required', 'table.parcial').each(function(){
+            window.validateInputs($(this), true);
+        });    
+        
+        if($('input#errorParcial', 'table.parcial').val() == '0'){
+            showSecundary();
+            $('input[name=productosCant]').focus();
+        }        
+    };
+    
+    var cargarDireccion = function(datos){
+        var form = $('form.modal', 'div#modal');
+        $('input[name=calles]', form).val(typeof(datos.calle) == 'undefined' ? '' : datos.calle);
+        $('input[name=alturas]', form).val(typeof(datos.altura) == 'undefined' ? '' : datos.altura);
+        $('input[name=piso]', form).val(typeof(datos.piso) == 'undefined' ? '' : datos.piso);
+        $('input[name=depto]', form).val(typeof(datos.depto) == 'undefined' ? '' : datos.depto);
+        $('input[name=telefono]', form).val(typeof(datos.telfono) == 'undefined' ? '' : datos.telfono);
+        $('input[name=codigoPostal]', form).val(typeof(datos.calle) == 'undefined' ? '' : datos.codigoPostal);
+        if(typeof(datos.localidad.id) != 'undefined' && typeof(datos.localidad.nombre) != 'undefined'){
+            $('input[name=localidades]', form).val(datos.localidad.nombre);    
+            $('input[name=localidades]', form).attr('title', datos.localidad.nombre);    
+            $('input[name=localidades]', form).attr('params', datos.localidad.id);    
+        }
+    }
+    var vaciarDireccion = function(){
+        var form = $('form.modal', 'div#modal');
+        $('input[name=calles]', form).val('');
+        $('input[name=alturas]', form).val('');
+        $('input[name=piso]', form).val('');
+        $('input[name=depto]', form).val('');
+        $('input[name=telefono]', form).val('');
+        $('input[name=codigoPostal]', form).val('');
+        $('input[name=localidad]', form).val('');
+        $('input[name=localidad]', form).removeAttr('title');    
+        $('input[name=localidad]', form).removeAttr('params');  
+    }
+    
+    // Validar y agregar productos a la lista en el modal de Alta de stock
+    $('div.add-button.altaStock').click(function(){
+        hacerAlta();
+    });
+    $('input[name=lote]').keypress(function(e){
+        if(e.which == 13){
+            $('div.add-button.altaStock', $(this).closest('td.primary')).click();
+        }
+    });
+    
+    // MOSTRAR RESUMEN DE CONFIRMACION
+    $('div.send-button.resumenAltaStock').click(function(){
+        if(window.added < 1){
+            $.msgBox({ title: "Alerta", content: 'Debe agregar al menos un producto'});
+        }else{
+            $('input#error', 'div#modal.inicio').val('0');
+            
+            $('input.required:not(.parcial)', 'div#modal.inicio').each(function(){
+                window.validateInputs($(this));
+            });
+                        
+            if($('input#error', 'div#modal.inicio').val() == '0'){
+                $('div#modal.inicio').hide();
+
+                $('td.cabecera-detalle-blue.cliente').html($('input[name=clientes]').val());
+                $('td.cabecera-detalle-blue.renovacionId').html($('input[name=renovacionId]').val());
+                $('td.cabecera-detalle-blue.calle').html($('input[name=calles]').val());
+                $('td.cabecera-detalle-blue.alturas').html($('input[name=alturas]').val());
+                $('td.cabecera-detalle-blue.piso').html($('input[name=piso]').val());
+                $('td.cabecera-detalle-blue.depto').html($('input[name=depto]').val());
+                $('td.cabecera-detalle-blue.telefono').html($('input[name=telefono]').val());
+                $('td.cabecera-detalle-blue.codigoPostal').html($('input[name=codigoPostal]').val());
+                $('td.cabecera-detalle-blue.localidades').html($('input[name=localidades]').val());
+                $('td.cabecera-detalle-blue.observaciones').html($('textarea[name=observaciones]').val());
+
+                $('div#modal.resumen').show();
+            }
+        }
+    });    
+    // valido que el input de cantidad solo permita numeros
+    $('input[name=cantidad]').keypress(function(e) {
+        var which = e.which;
+        var keyCode = e.keyCode;
+        // keyCode = 8 -> backspace || 9 -> tabulador 37 -> left || 39 -> right || 46 -> Suprimir || 116 -> F5
+        // which 48 -> 57 son caracteres numericos
+        if((which >= 48 && which <= 57) || keyCode == 8 || keyCode == 9 || keyCode == 37 || keyCode == 39 || keyCode == 46 || keyCode == 116){ 
+            return true;
+        }else{
+            return false;
+        }
+    });  
+    // Ajax para cargar la direccion del cliente dinamicamente
+    $('select[name=direccionCliente]').change(function(){
+        if($(this).val() == 1){
+            if(typeof($('input[name=clientes]').attr('params')) == 'undefined' || $('input[name=clientes]').attr('params').trim() == ''){
+                $.msgBox({ title: "Alerta", content: 'Debe seleccionar un cliente'});
+                $(this).val(0);
+            }else{
+                $.post(
+                    'inc/process.php',
+                    {   
+                        accion  : 'traerDatos',
+                        id      : $('input[name=clientes]').attr('params'),
+                        tipo    : 'clientes'
+                    }, 
+                    function(data){
+                        if(data.soyError == false){
+                            cargarDireccion(data);
+                        }else{
+                            $.msgBox({ title: "Error", content: 'No se pudo cargar la dirección del cliente'});
+                        }
+                    },
+                    'json'
+                );   
+            }
+        }else{
+            vaciarDireccion();
+        }
+    });    
+    // Elimino elementos agregados
+    $('div.eliminar', 'table#productos').live('click', function(){
+        var idProducto = $(this).closest('tr').attr('id');
+        window.added -= 1;
+        
+        $(this).closest('tr').remove();
+        $('tr#'+idProducto , 'table#products_added').remove();
+        
+        $('tr', 'table#productos, table#products_added').each(function(index){
+            if(index > 0){
+                if(index % 2){
+                    if($(this).hasClass('par')){
+                        $(this).removeClass('par');
+                        $(this).addClass('impar');
+                    }
+                }else{
+                    if($(this).hasClass('impar')){
+                        $(this).removeClass('impar');
+                        $(this).addClass('par');
+                    }
+                }
+            }
+        });
+    });
+
+    // VOLVER
+    $('div.send-button.volver').click(function(){
+        $('div#modal.resumen').hide();
+        $('div#modal.inicio').show();
+    });  
+    // REALIZAR ALTA
+    $('div.hacerAltaStock').click(function(){
+        var productosSplited = '';
+        $('tr', 'table#productos tbody').each(function(){
+            $('td', this).each(function(){
+                if(typeof $(this).attr('params') != 'undefined' && $(this).attr('params').trim() != ''){
+                    productosSplited += $(this).attr('params');
+                    productosSplited += '#';
+                }
+            });
+            productosSplited += '||';
+        });
+        var params = {
+            cantidadProductos   : added,
+            desdeAlta           : false,
+            clientes            : $('input[name=clientes]').attr('params'),
+            pacientes           : $('input[name=pacientes]').attr('params'),
+            productos           : productosSplited,
+	    renovacionId: 	$('input[name=renovacionId]').val(),
+            calles              : $('input[name=calles]').val(),
+            alturas             : $('input[name=alturas]').val(),
+            piso                : $('input[name=piso]').val(),
+            depto               : $('input[name=depto]').val(),
+            telefono            : $('input[name=telefono]').val(),
+            codigoPostal        : $('input[name=codigoPostal]').val(),
+            localidades         : $('input[name=localidades]').attr('params'),
+            direccionCliente    : $('select[name=direccionCliente]').attr('params'),
+            observaciones       : $('textarea[name=observaciones]').val(),
+            tipo                : 'pedidos'
+        };
+        $('div#modal').css('opacity', '0.4');
+        $.post(
+            'inc/process.php',
+            {   
+                accion     : 'hacerAlta',
+                parametros : params
+            }, 
+            function(data){
+                var response = JSON.parse(data);
+                $.msgBox({ title: "Alerta", content: response.mensaje});
+                
+                $('div#modal').css('opacity', '1');
+                
+                if(!response.soyError){
+                    $.colorbox.close();
+                    window.loadFlix();
+                }
+            }
+        );
+    });
+</script>
