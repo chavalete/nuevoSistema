@@ -8,11 +8,11 @@
 :root{
     /* Claro (default — azul y blanco). El toggle (js/themeToggle.js)
        agrega data-theme="oscuro" en <html> para pasar al set de abajo. */
-    --bg:             #EBEEF2;
-    --surface:        #FAFBFC;
-    --surface-2:      #F0F3F6;
-    --surface-3:      #E6EAEF;
-    --border:         #D8DFE6;
+    --bg:             #F4F6F9;
+    --surface:        #FFFFFF;
+    --surface-2:      #EEF2F6;
+    --surface-3:      #E3E9EF;
+    --border:         #DCE3EA;
     --text:           #17212B;
     --text-muted:     #5B6B7C;
     --accent:         #0B6FB0;
@@ -25,7 +25,7 @@
     --warning-soft:   #FBEBCF;
     --critical:       #C13B2E;
     --critical-soft:  #FBE0DB;
-    --brand-strip-bg: #FAFBFC;
+    --brand-strip-bg: #FFFFFF;
     --sidebar-w:      252px;
     --shadow-sm: 0 1px 2px rgba(23,33,43,.06);
     --shadow: 0 10px 24px -10px rgba(23,33,43,.18);
@@ -693,12 +693,18 @@ tr.detalles-dato.alertado_par, tr.detalles-dato.alertado_impar{
    CSS (jQueryUI.css) sin tocar — acá solo pisamos colores/tipografía de
    las clases que arma ese widget, sin tocar el plugin ni su JS. */
 .ui-autocomplete.ui-widget-content{
-    background: var(--surface) !important;
+    /* Blanco hueso en vez del blanco puro de --surface: es una lista larga
+       de ítems, uno al lado del otro, y el blanco puro ahí se sentía muy
+       fuerte. Ajuste puntual, no toca el resto del sistema. */
+    background: #FAFAF7 !important;
     border: 1px solid var(--border) !important;
     border-radius: 8px;
     box-shadow: var(--shadow);
     padding: 4px !important;
     font-family: 'Public Sans', Tahoma, Arial, sans-serif;
+}
+html[data-theme="oscuro"] .ui-autocomplete.ui-widget-content{
+    background: var(--surface) !important;
 }
 .ui-autocomplete .ui-menu-item{
     background: transparent !important;
