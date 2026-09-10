@@ -261,7 +261,7 @@
             var rs = reCalculatePromo(id_f, true, existing_tr);
 
             $('td.pu', existing_tr).text(rs.precio);
-            var pt = nueva_cantidad * rs.precio;
+            var pt = Math.round((nueva_cantidad * rs.precio) * 100) / 100;
             $('td.pt', existing_tr).attr('value', pt).text(pt);
 
             // Si pertenece a una familia, actualizamos los otros productos hermanos de esa familia
@@ -271,8 +271,8 @@
                     if($(this).attr('id_f') == id_f){
                         $('td.pu', tr).text(rs.precio);
                         $('td.pt', tr)
-                            .attr('value', rs.precio * $('.editableCount', tr).val())
-                            .text(rs.precio * $('.editableCount', tr).val());
+                            .attr('value', Math.round((rs.precio * $('.editableCount', tr).val()) * 100) / 100)
+                            .text(Math.round((rs.precio * $('.editableCount', tr).val()) * 100) / 100);
                     }
                 });
             }
@@ -286,8 +286,8 @@
                     if($(this).attr('id_f') == id_f){
                         $('td.pu', tr).text(rs.precio);
                         $('td.pt', tr)
-                            .attr('value', rs.precio * $('.editableCount', tr).val())
-                            .text(rs.precio * $('.editableCount', tr).val());
+                            .attr('value', Math.round((rs.precio * $('.editableCount', tr).val()) * 100) / 100)
+                            .text(Math.round((rs.precio * $('.editableCount', tr).val()) * 100) / 100);
                     }
                 });
             }
@@ -318,7 +318,7 @@
         var tdProd  = '<td params="'+p.id+'">'+p.label+'</td>';
         var tdCant  = '<td class="cant" style="width: 120px;" params="'+p.cantidad+'"><input type="number" style="width: 100px;" class="editableCount" value="'+p.cantidad+'" /></td>';
         var tdPU    = '<td class="pu">'+p.precio+'</td>';
-        var tdPT    = '<td class="pt" value="'+p.precio * p.cantidad+'">'+p.precio * p.cantidad+'</td>';
+        var tdPT    = '<td class="pt" value="'+Math.round((p.precio * p.cantidad) * 100) / 100+'">'+Math.round((p.precio * p.cantidad) * 100) / 100+'</td>';
         var tdSupr  = '<td class="eliminar"><div class="eliminar" title="Quitar"></div></td>';
         var tr;
 
@@ -491,7 +491,7 @@
         var rs = reCalculatePromo(id_f, true, el);
 
         $('td.pu', el).html(rs.precio);
-        var pt   = $(this).val() * ($('td.pu', el).html());
+        var pt   = Math.round(($(this).val() * ($('td.pu', el).html())) * 100) / 100;
         el.attr('params', $(this).val());
 
         $(this).closest('td').attr('cantidad', $(this).val());
@@ -504,8 +504,8 @@
                 if($(this).attr('id_f') == id_f){
                     $('td.pu', tr).text(rs.precio);
                     $('td.pt', tr)
-                        .attr('value', rs.precio * $('.editableCount', tr).val())
-                        .text(rs.precio * $('.editableCount', tr).val());
+                        .attr('value', Math.round((rs.precio * $('.editableCount', tr).val()) * 100) / 100)
+                        .text(Math.round((rs.precio * $('.editableCount', tr).val()) * 100) / 100);
                 }
             });
         }
@@ -547,8 +547,8 @@
                 if($(this).attr('id_f') == id_f){
                     $('td.pu', tr).text(rs.precio);
                     $('td.pt', tr)
-                        .attr('value', rs.precio * $('.editableCount', tr).val())
-                        .text(rs.precio * $('.editableCount', tr).val());
+                        .attr('value', Math.round((rs.precio * $('.editableCount', tr).val()) * 100) / 100)
+                        .text(Math.round((rs.precio * $('.editableCount', tr).val()) * 100) / 100);
                 }
             });
         }
