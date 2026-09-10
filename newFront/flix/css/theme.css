@@ -8,11 +8,11 @@
 :root{
     /* Claro (default — azul y blanco). El toggle (js/themeToggle.js)
        agrega data-theme="oscuro" en <html> para pasar al set de abajo. */
-    --bg:             #F4F6F9;
-    --surface:        #FFFFFF;
-    --surface-2:      #EEF2F6;
-    --surface-3:      #E3E9EF;
-    --border:         #DCE3EA;
+    --bg:             #EBEEF2;
+    --surface:        #FAFBFC;
+    --surface-2:      #F0F3F6;
+    --surface-3:      #E6EAEF;
+    --border:         #D8DFE6;
     --text:           #17212B;
     --text-muted:     #5B6B7C;
     --accent:         #0B6FB0;
@@ -25,7 +25,7 @@
     --warning-soft:   #FBEBCF;
     --critical:       #C13B2E;
     --critical-soft:  #FBE0DB;
-    --brand-strip-bg: #FFFFFF;
+    --brand-strip-bg: #FAFBFC;
     --sidebar-w:      252px;
     --shadow-sm: 0 1px 2px rgba(23,33,43,.06);
     --shadow: 0 10px 24px -10px rgba(23,33,43,.18);
