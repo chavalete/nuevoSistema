@@ -1,0 +1,10 @@
+# Credenciales y material criptográfico: nunca deben subirse al repo.
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+*.cer
+almacenamiento.ini
+almacenamiento.ini~
+**/afipPropia/
