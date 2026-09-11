@@ -55,6 +55,7 @@ try {
 <style>
     .aviso-precios-banner{
         display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+        width:1200px; margin:0 auto; box-sizing:border-box;
         background:#e7f1fb; border-bottom:3px solid #0d5aa7; padding:10px 20px;
         font-family:Tahoma, Verdana, Arial, sans-serif;
     }
