@@ -135,6 +135,4 @@ try {
 </div>
 
 <div class="aviso-precios-toast" id="avisoPreciosToast">✓ Confirmado — gracias</div>
-
-<script src="js/avisoPrecios.js"></script>
 <?php endif; ?>

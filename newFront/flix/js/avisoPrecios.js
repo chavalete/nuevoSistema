@@ -45,3 +45,18 @@ function avisoPreciosConfirmar(){
     };
     xhr.send('productoIds=' + encodeURIComponent(ids.join(',')));
 }
+
+// El sistema navega entre secciones por AJAX (loadFlix(), en flix.js,
+// pega contra tpl/flix/flix.php) sin recargar la página completa, así
+// que el header — y con él este aviso — nunca se vuelve a pedir solo.
+// Reconsultamos después de cada cambio de sección para que se
+// mantenga al día sin depender de un F5. Mismo patrón que ya usa
+// topbarTitle.js para sincronizar el título de la sección.
+$(document).ajaxComplete(function(event, xhr, settings){
+    if(!settings || settings.url !== 'tpl/flix/flix.php'){ return; }
+    var wrap = document.getElementById('avisoPreciosWrap');
+    if(!wrap){ return; }
+    $.get('inc/avisoPrecios_check.php', function(html){
+        wrap.innerHTML = html;
+    });
+});

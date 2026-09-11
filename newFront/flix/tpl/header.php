@@ -40,4 +40,5 @@
     </div>
 </div>
 
-<?php include('avisoPrecios.php'); ?>
+<div id="avisoPreciosWrap"><?php include('avisoPrecios.php'); ?></div>
+<script src="js/avisoPrecios.js"></script>
