@@ -249,6 +249,20 @@ var Flix = (function(){
                 window.location.href = 'panelPrincipal.php';
                 return;
             }
+            // Si estamos parados en el Panel Principal y se navega a otra
+            // sección, hay que ocultar el dashboard: si no, el contenido
+            // nuevo se carga en #flix_grid pero queda tapado debajo. También
+            // sacamos el #flix_titulo propio del panel: si no, queda
+            // duplicado con el que trae la sección nueva y el topbar se
+            // pisa siempre con "Principal" (toma el primero del DOM).
+            var panelPrincipal = document.getElementById('panelPrincipal');
+            if(panelPrincipal){
+                panelPrincipal.style.display = 'none';
+                var panelPrincipalTitulo = document.getElementById('flix_titulo');
+                if(panelPrincipalTitulo){
+                    panelPrincipalTitulo.parentNode.removeChild(panelPrincipalTitulo);
+                }
+            }
             flixResetValues();
             window.parametros.tipo = $(this).attr('params');
             loadFlix();
