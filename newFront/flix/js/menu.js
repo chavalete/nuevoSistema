@@ -2,14 +2,17 @@ var Menu = (function(){
     var accordion = function(){
         $('ul li:has(ul)').hover(
             function(){
-                $(this).find('ul').show('fast');
+                // stop(true, true) cancela cualquier show/hide en cola antes
+                // de arrancar el nuevo: sin esto, pasar el mouse rápido por
+                // varios ítems apila animaciones y se siente "acelerado".
+                $(this).find('ul').stop(true, true).show('fast');
                 $('span.arrow', $(this)).addClass('hover');
             },
             function(){
-                $(this).find('ul').hide();
+                $(this).find('ul').stop(true, true).hide();
                 $('span.arrow', $(this)).removeClass('hover');
             }
-        );         
+        );
     }
     
     var bindEvents = function(){
