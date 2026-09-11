@@ -2,8 +2,27 @@
 // El Panel Principal (Tablero) no usa esta grilla genérica: tiene su propia
 // pantalla en panelPrincipal.php. Si el autoload inicial de flix.js llega
 // hasta acá con este tipo (por ejemplo, al volver a esa sección desde otra
-// parte del menú), no hacemos nada.
+// parte del menú), no renderizamos ninguna grilla.
+//
+// OJO: igual hay que devolver el bloque "parametros_aux" de más abajo.
+// Ese script solo se define cuando llega la PRIMERA respuesta de este
+// archivo (jQuery ejecuta el <script> al insertarlo en el DOM); si acá
+// cortamos con exit y no llega nunca, flixResetValues() deja
+// window.parametros en undefined para el resto de la sesión y el menú
+// de secciones se rompe apenas lo tocás (aunque sea en otra pantalla).
 if(!empty($_POST['parametros']['tipo']) && $_POST['parametros']['tipo'] === 'principal'){
+    include('../../inc/master_header.php');
+    ?>
+    <script>
+        var parametros_aux = {
+            ordenarOrden : '',
+            ordenarPor   : '',
+            pagina       : '<?=ParseINI::getConfig('defaults_js', 'pagina')?>',
+            porPagina    : '<?=ParseINI::getConfig('defaults_js', 'porPagina')?>',
+            tipo         : '<?=ParseINI::getConfig('defaults_js', 'tipo')?>'
+        };
+    </script>
+    <?php
     exit;
 }
 
