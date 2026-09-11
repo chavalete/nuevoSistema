@@ -55,20 +55,20 @@ try {
 <style>
     .aviso-precios-banner{
         display:flex; align-items:center; gap:12px; flex-wrap:wrap;
-        background:#fff4cf; border-bottom:3px solid #e0a800; padding:10px 20px;
+        background:#e7f1fb; border-bottom:3px solid #0d5aa7; padding:10px 20px;
         font-family:Tahoma, Verdana, Arial, sans-serif;
     }
     .aviso-precios-banner .ico{
-        flex:none; width:26px; height:26px; border-radius:50%; background:#e0a800; color:#fff;
+        flex:none; width:26px; height:26px; border-radius:50%; background:#0d5aa7; color:#fff;
         display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:13px;
     }
     .aviso-precios-banner .msg{ flex:1; min-width:220px; font-size:13px; color:#00335e; }
     .aviso-precios-banner .msg b{ font-size:14px; }
     .aviso-precios-banner button{
-        flex:none; background:#e0a800; color:#fff; border:none; border-radius:4px; font-weight:bold;
+        flex:none; background:#0d5aa7; color:#fff; border:none; border-radius:4px; font-weight:bold;
         padding:8px 16px; font-size:12px; cursor:pointer; font-family:inherit;
     }
-    .aviso-precios-banner button:hover{ background:#c99400; }
+    .aviso-precios-banner button:hover{ background:#0a4886; }
     .aviso-precios-banner.hidden{ display:none; }
 
     .aviso-precios-scrim{ position:fixed; inset:0; background:rgba(0,0,0,.55); opacity:0; pointer-events:none; transition:opacity .15s; z-index:9500; }
