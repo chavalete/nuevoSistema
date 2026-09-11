@@ -2,25 +2,48 @@
 // Aviso de precios actualizados — pantalla aislada, no pasa por
 // inc/process.php ni por frenteDeFrentes. Solo lee lista_precios_10 y
 // la compara contra las confirmaciones del usuario logueado.
+//
+// Dos reglas:
+// - Solo se consulta/muestra a usuarios dados de alta en
+//   aviso_precios_usuarios (no es para todo el mundo).
+// - La consulta a la base se cachea en sesion por 1 hora, para no
+//   pegarle a la base en cada carga de pantalla. Al confirmar
+//   (avisoPrecios_confirmar.php) se fuerza un chequeo fresco.
 require_once __DIR__ . '/../../libreria/almacenamiento/miPDO.php';
+
+define('AVISO_PRECIOS_TTL_SEGUNDOS', 3600);
 
 $avisoPreciosPendientes = array();
 try {
-    $db = new miPDO('dmelmac', __DIR__ . '/../../libreria/almacenamiento/almacenamiento.ini');
     $usuarioId = isset($_SESSION['usuarioId']) ? $_SESSION['usuarioId'] : null;
-    if ($usuarioId) {
-        $stmt = $db->prepare(
-            "SELECT lp.producto_id, dp.producto_nombre, dp.producto_presentacion, lp.producto_pventa
-             FROM lista_precios_10 lp
-             JOIN datos_productos dp ON dp.producto_id = lp.producto_id
-             LEFT JOIN precio_confirmaciones pc
-                    ON pc.producto_id = lp.producto_id AND pc.usuario_id = :usuarioId
-             WHERE lp.fecha_actualizacion IS NOT NULL
-               AND (pc.fecha_confirmado IS NULL OR pc.fecha_confirmado < lp.fecha_actualizacion)
-             ORDER BY lp.fecha_actualizacion DESC"
-        );
-        $stmt->execute(array(':usuarioId' => $usuarioId));
-        $avisoPreciosPendientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $cacheVencido = !isset($_SESSION['avisoPreciosUltimoCheck'])
+        || (time() - $_SESSION['avisoPreciosUltimoCheck']) >= AVISO_PRECIOS_TTL_SEGUNDOS;
+
+    if ($usuarioId && $cacheVencido) {
+        $db = new miPDO('dmelmac', __DIR__ . '/../../libreria/almacenamiento/almacenamiento.ini');
+
+        $stmtSusc = $db->prepare("SELECT 1 FROM aviso_precios_usuarios WHERE usuario_id = :usuarioId");
+        $stmtSusc->execute(array(':usuarioId' => $usuarioId));
+
+        if ($stmtSusc->fetchColumn()) {
+            $stmt = $db->prepare(
+                "SELECT lp.producto_id, dp.producto_nombre, dp.producto_presentacion, lp.producto_pventa
+                 FROM lista_precios_10 lp
+                 JOIN datos_productos dp ON dp.producto_id = lp.producto_id
+                 LEFT JOIN precio_confirmaciones pc
+                        ON pc.producto_id = lp.producto_id AND pc.usuario_id = :usuarioId
+                 WHERE lp.fecha_actualizacion IS NOT NULL
+                   AND (pc.fecha_confirmado IS NULL OR pc.fecha_confirmado < lp.fecha_actualizacion)
+                 ORDER BY lp.fecha_actualizacion DESC"
+            );
+            $stmt->execute(array(':usuarioId' => $usuarioId));
+            $avisoPreciosPendientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        $_SESSION['avisoPreciosPendientes'] = $avisoPreciosPendientes;
+        $_SESSION['avisoPreciosUltimoCheck'] = time();
+    } elseif (isset($_SESSION['avisoPreciosPendientes'])) {
+        $avisoPreciosPendientes = $_SESSION['avisoPreciosPendientes'];
     }
 } catch (Exception $e) {
     // Si falla la consulta (por ejemplo, todavia no corriste el ALTER/CREATE
