@@ -49,9 +49,8 @@ function avisoPreciosConfirmar(){
 // El sistema navega entre secciones por AJAX (loadFlix(), en flix.js,
 // pega contra tpl/flix/flix.php) sin recargar la página completa, así
 // que el header — y con él este aviso — nunca se vuelve a pedir solo.
-// Reconsultamos después de cada cambio de sección para que se
-// mantenga al día sin depender de un F5. Mismo patrón que ya usa
-// topbarTitle.js para sincronizar el título de la sección.
+// En vez de atarlo a la navegación, se revisa solo cada 5 minutos, sin
+// importar qué esté haciendo el usuario.
 function avisoPreciosCheck(){
     var wrap = document.getElementById('avisoPreciosWrap');
     if(!wrap){ return; }
@@ -60,14 +59,4 @@ function avisoPreciosCheck(){
     });
 }
 
-$(document).ajaxComplete(function(event, xhr, settings){
-    if(!settings || settings.url !== 'tpl/flix/flix.php'){ return; }
-    avisoPreciosCheck();
-});
-
-// Polling cada 1 segundo (AVISO_PRECIOS_TTL_SEGUNDOS en tpl/avisoPrecios.php
-// tiene que estar en 1 también, sino el cache de sesión igual frena la
-// consulta a la base). Pensado para ver el aviso aparecer sin tener que
-// navegar. Si esto queda así en producción, el server recibe un hit por
-// segundo por cada pestaña abierta — subir el intervalo antes de dejarlo.
-setInterval(avisoPreciosCheck, 1000);
+setInterval(avisoPreciosCheck, 5 * 60 * 1000);
