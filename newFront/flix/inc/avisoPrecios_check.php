@@ -6,4 +6,4 @@
 // página. Reusa tpl/avisoPrecios.php tal cual (misma consulta, mismo
 // cache de 1 hora) en vez de duplicar la lógica.
 session_start();
-include __DIR__ . '/../tpl/avisoPrecios.php';
+include '/var/www/html/limonLocal/flix/tpl/avisoPrecios.php';

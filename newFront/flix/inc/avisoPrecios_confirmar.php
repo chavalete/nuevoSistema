@@ -5,7 +5,7 @@
 session_start();
 header('Content-Type: application/json');
 
-require_once __DIR__ . '/../../libreria/almacenamiento/miPDO.php';
+require_once '/var/www/html/limonLocal/libreria/almacenamiento/miPDO.php';
 
 $respuesta = array('soyError' => true, 'mensaje' => '');
 
@@ -26,7 +26,7 @@ if (empty($productoIds)) {
 }
 
 try {
-    $db = new miPDO('dmelmac', __DIR__ . '/../../libreria/almacenamiento/almacenamiento.ini');
+    $db = new miPDO('dmelmac', '/var/www/html/limonLocal/libreria/almacenamiento/almacenamiento.ini');
     $stmt = $db->prepare(
         "INSERT INTO precio_confirmaciones (usuario_id, producto_id, fecha_confirmado)
          VALUES (:usuarioId, :productoId, now())

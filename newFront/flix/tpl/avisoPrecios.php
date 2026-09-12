@@ -9,7 +9,7 @@
 // - La consulta a la base se cachea en sesion por 1 hora, para no
 //   pegarle a la base en cada carga de pantalla. Al confirmar
 //   (avisoPrecios_confirmar.php) se fuerza un chequeo fresco.
-require_once __DIR__ . '/../../libreria/almacenamiento/miPDO.php';
+require_once '/var/www/html/limonLocal/libreria/almacenamiento/miPDO.php';
 
 define('AVISO_PRECIOS_TTL_SEGUNDOS', 3600);
 
@@ -20,7 +20,7 @@ try {
         || (time() - $_SESSION['avisoPreciosUltimoCheck']) >= AVISO_PRECIOS_TTL_SEGUNDOS;
 
     if ($usuarioId && $cacheVencido) {
-        $db = new miPDO('dmelmac', __DIR__ . '/../../libreria/almacenamiento/almacenamiento.ini');
+        $db = new miPDO('dmelmac', '/var/www/html/limonLocal/libreria/almacenamiento/almacenamiento.ini');
 
         $stmtSusc = $db->prepare("SELECT 1 FROM aviso_precios_usuarios WHERE usuario_id = :usuarioId");
         $stmtSusc->execute(array(':usuarioId' => $usuarioId));
