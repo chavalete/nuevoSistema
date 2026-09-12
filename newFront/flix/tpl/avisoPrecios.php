@@ -85,7 +85,7 @@ try {
     .aviso-precios-head span{ display:block; font-weight:normal; font-size:11px; opacity:.85; margin-top:2px; }
     .aviso-precios-close{ position:absolute; top:8px; right:10px; background:none; border:none; color:#fff; font-size:16px; cursor:pointer; }
     .aviso-precios-body{ padding:6px 18px; max-height:340px; overflow-y:auto; }
-    .aviso-precios-row{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; padding:10px 0; border-bottom:1px solid #c9d6de; font-size:12px; color:#00335e; }
+    .aviso-precios-row{ display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid #c9d6de; font-size:12px; color:#00335e; }
     .aviso-precios-row .nombre{ font-size:13px; }
     .aviso-precios-row .presentacion{ display:block; font-size:11px; color:#6b7f8c; font-weight:normal; }
     .aviso-precios-row .precio{ font-weight:bold; font-size:13px; white-space:nowrap; }
