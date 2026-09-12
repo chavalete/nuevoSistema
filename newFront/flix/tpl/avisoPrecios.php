@@ -26,6 +26,9 @@ try {
         $stmtSusc->execute(array(':usuarioId' => $usuarioId));
 
         if ($stmtSusc->fetchColumn()) {
+            // Si sumas la columna de "Precio x Caja" a la consulta, llamala
+            // producto_pxcaja (o ajusta el nombre abajo, en el foreach) para
+            // que la tercera columna de la tabla la muestre.
             $stmt = $db->prepare(
                 "SELECT lp.producto_id, dp.producto_nombre, dp.producto_presentacion, lp.producto_pventa
                  FROM lista_precios_10 lp
@@ -85,10 +88,17 @@ try {
     .aviso-precios-head span{ display:block; font-weight:normal; font-size:11px; opacity:.85; margin-top:2px; }
     .aviso-precios-close{ position:absolute; top:8px; right:10px; background:none; border:none; color:#fff; font-size:16px; cursor:pointer; }
     .aviso-precios-body{ padding:6px 18px; max-height:340px; overflow-y:auto; }
-    .aviso-precios-row{ display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid #c9d6de; font-size:12px; color:#00335e; }
+    .aviso-precios-cols{
+        display:grid; grid-template-columns:1fr auto auto; gap:10px; align-items:end;
+        padding:0 0 6px; border-bottom:1px solid #9db3c2;
+    }
+    .aviso-precios-cols span{ font-size:10px; font-weight:bold; color:#5a7386; text-transform:uppercase; letter-spacing:.3px; }
+    .aviso-precios-cols span.col-precio, .aviso-precios-cols span.col-caja{ text-align:right; white-space:nowrap; }
+    .aviso-precios-row{ display:grid; grid-template-columns:1fr auto auto; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid #c9d6de; font-size:12px; color:#00335e; }
     .aviso-precios-row .nombre{ font-size:13px; }
     .aviso-precios-row .presentacion{ display:block; font-size:11px; color:#6b7f8c; font-weight:normal; }
-    .aviso-precios-row .precio{ font-weight:bold; font-size:13px; white-space:nowrap; }
+    .aviso-precios-row .precio, .aviso-precios-row .precio-caja{ font-weight:bold; font-size:13px; white-space:nowrap; text-align:right; }
+    .aviso-precios-row .precio-caja{ color:#5a7386; font-size:12px; }
     .aviso-precios-foot{ padding:14px 18px 18px; }
     .aviso-precios-confirm{ width:100%; background:#2a8f4f; color:#fff; border:none; border-radius:4px; padding:10px; font-weight:bold; font-size:13px; cursor:pointer; font-family:inherit; }
     .aviso-precios-confirm:hover{ background:#237a42; }
@@ -119,6 +129,11 @@ try {
         <button type="button" class="aviso-precios-close" onclick="avisoPreciosCerrar()" aria-label="Cerrar">✕</button>
     </div>
     <div class="aviso-precios-body">
+        <div class="aviso-precios-cols">
+            <span class="col-producto">Producto</span>
+            <span class="col-precio">Precio</span>
+            <span class="col-caja">Precio x Caja</span>
+        </div>
         <?php foreach ($avisoPreciosPendientes as $p): ?>
         <div class="aviso-precios-row" data-producto-id="<?=(int)$p['producto_id']?>">
             <span class="nombre">
@@ -126,6 +141,7 @@ try {
                 <span class="presentacion"><?=htmlspecialchars($p['producto_presentacion'])?></span>
             </span>
             <span class="precio">$ <?=number_format((float)$p['producto_pventa'], 2, ',', '.')?></span>
+            <span class="precio-caja"><?=isset($p['producto_pxcaja']) ? '$ ' . number_format((float)$p['producto_pxcaja'], 2, ',', '.') : '—'?></span>
         </div>
         <?php endforeach; ?>
     </div>
