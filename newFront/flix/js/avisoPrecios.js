@@ -52,11 +52,22 @@ function avisoPreciosConfirmar(){
 // Reconsultamos después de cada cambio de sección para que se
 // mantenga al día sin depender de un F5. Mismo patrón que ya usa
 // topbarTitle.js para sincronizar el título de la sección.
-$(document).ajaxComplete(function(event, xhr, settings){
-    if(!settings || settings.url !== 'tpl/flix/flix.php'){ return; }
+function avisoPreciosCheck(){
     var wrap = document.getElementById('avisoPreciosWrap');
     if(!wrap){ return; }
     $.get('inc/avisoPrecios_check.php', function(html){
         wrap.innerHTML = html;
     });
+}
+
+$(document).ajaxComplete(function(event, xhr, settings){
+    if(!settings || settings.url !== 'tpl/flix/flix.php'){ return; }
+    avisoPreciosCheck();
 });
+
+// Polling cada 1 segundo (AVISO_PRECIOS_TTL_SEGUNDOS en tpl/avisoPrecios.php
+// tiene que estar en 1 también, sino el cache de sesión igual frena la
+// consulta a la base). Pensado para ver el aviso aparecer sin tener que
+// navegar. Si esto queda así en producción, el server recibe un hit por
+// segundo por cada pestaña abierta — subir el intervalo antes de dejarlo.
+setInterval(avisoPreciosCheck, 1000);
