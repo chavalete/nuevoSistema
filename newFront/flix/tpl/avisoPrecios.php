@@ -3,23 +3,22 @@
 // inc/process.php ni por frenteDeFrentes. Solo lee lista_precios_10 y
 // la compara contra las confirmaciones del usuario logueado.
 //
-// Dos reglas:
-// - Solo se consulta/muestra a usuarios dados de alta en
-//   aviso_precios_usuarios (no es para todo el mundo).
-// - La consulta a la base se cachea en sesion por 1 hora, para no
-//   pegarle a la base en cada carga de pantalla. Al confirmar
-//   (avisoPrecios_confirmar.php) se fuerza un chequeo fresco.
+// Solo se consulta/muestra a usuarios dados de alta en
+// aviso_precios_usuarios (no es para todo el mundo).
+//
+// Sin cache de sesion: se probo cachear esto por un rato (para no
+// pegarle a la base en cada carga) y el cache se quedaba pegado en
+// resultados viejos sin causa clara. Como esto se ejecuta una sola vez
+// por login y algunas veces por navegacion/chequeo periodico, el costo
+// de consultar siempre fresco es bajo comparado con el riesgo de que
+// se vuelva a trabar.
 require_once '/var/www/html/limonLocal/libreria/almacenamiento/miPDO.php';
-
-define('AVISO_PRECIOS_TTL_SEGUNDOS', 3600);
 
 $avisoPreciosPendientes = array();
 try {
     $usuarioId = isset($_SESSION['usuarioId']) ? $_SESSION['usuarioId'] : null;
-    $cacheVencido = !isset($_SESSION['avisoPreciosUltimoCheck'])
-        || (time() - $_SESSION['avisoPreciosUltimoCheck']) >= AVISO_PRECIOS_TTL_SEGUNDOS;
 
-    if ($usuarioId && $cacheVencido) {
+    if ($usuarioId) {
         $db = new miPDO('dmelmac', '/var/www/html/limonLocal/libreria/almacenamiento/almacenamiento.ini');
 
         $stmtSusc = $db->prepare("SELECT 1 FROM aviso_precios_usuarios WHERE usuario_id = :usuarioId");
@@ -42,11 +41,6 @@ try {
             $stmt->execute(array(':usuarioId' => $usuarioId));
             $avisoPreciosPendientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
-
-        $_SESSION['avisoPreciosPendientes'] = $avisoPreciosPendientes;
-        $_SESSION['avisoPreciosUltimoCheck'] = time();
-    } elseif (isset($_SESSION['avisoPreciosPendientes'])) {
-        $avisoPreciosPendientes = $_SESSION['avisoPreciosPendientes'];
     }
 } catch (Exception $e) {
     // Si falla la consulta (por ejemplo, todavia no corriste el ALTER/CREATE

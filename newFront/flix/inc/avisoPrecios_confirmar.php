@@ -36,10 +36,6 @@ try {
     foreach ($productoIds as $productoId) {
         $stmt->execute(array(':usuarioId' => $usuarioId, ':productoId' => $productoId));
     }
-    // Fuerza que la proxima carga de pantalla vuelva a consultar la base
-    // en vez de usar el cache de 1 hora, asi el aviso desaparece ya mismo.
-    unset($_SESSION['avisoPreciosUltimoCheck']);
-    unset($_SESSION['avisoPreciosPendientes']);
     $respuesta['soyError'] = false;
 } catch (Exception $e) {
     $respuesta['mensaje'] = 'No se pudo guardar la confirmación.';
