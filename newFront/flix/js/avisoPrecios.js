@@ -55,7 +55,7 @@ function avisoPreciosConfirmar(){
 function avisoPreciosCheck(){
     var wrap = document.getElementById('avisoPreciosWrap');
     if(!wrap){ return; }
-    $.get('inc/avisoPrecios_check.php', function(html){
+    $.get('inc/avisoPrecios_check.php?_=' + Date.now(), function(html){
         wrap.innerHTML = html;
     });
 }
