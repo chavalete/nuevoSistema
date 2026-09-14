@@ -200,3 +200,17 @@ html[data-theme="oscuro"]{
 @media (max-width:480px){
     #panelPrincipal .kpi-value{ font-size:1.6rem; }
 }
+
+/* Los KPIs ya son reales pero todavia no comparamos contra el periodo
+   anterior (no esta en el contrato de accion=obtenerDatosPanelPrincipal
+   todavia) - ocultos en vez de dejar un "12,4%" inventado al lado de un
+   numero real. */
+#panelPrincipal .kpi-delta, #panelPrincipal .kpi-sub-delta{ display:none; }
+
+/* Estado de carga/error de accion=obtenerDatosPanelPrincipal */
+#panelPrincipal.pp-loading{ opacity:.55; pointer-events:none; transition:opacity .15s ease; }
+#panelPrincipal .pp-error-banner{ display:none; }
+#panelPrincipal.pp-error .pp-error-banner{
+    display:block; background:var(--critical); color:#fff; border-radius:8px;
+    padding:10px 14px; font-size:.82rem; font-weight:600; margin-bottom:14px;
+}

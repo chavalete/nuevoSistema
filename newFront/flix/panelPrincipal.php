@@ -45,7 +45,8 @@ if($_SESSION['sistema'] !="limonMoreno"){
 
                 <div id="panelPrincipal">
 
-                    <span class="example-badge">Datos de ejemplo — todavía sin conectar a la base real</span>
+                    <span class="example-badge">KPIs, gráficos y tablas en vivo — el detalle por comprobante/producto todavía es de ejemplo</span>
+                    <div class="pp-error-banner">No se pudieron cargar los datos del período. Probá de nuevo en unos segundos.</div>
 
                     <div class="range">
                         <button type="button" class="range-chip" data-preset="7d" onclick="ppSetPreset('7d', this)">7 días</button>
@@ -78,12 +79,12 @@ if($_SESSION['sistema'] !="limonMoreno"){
                                 <div class="kpi-submetrics">
                                     <div class="kpi-submetric">
                                         <span class="kpi-sub-label">Margen bruto</span>
-                                        <span class="kpi-sub-value">42,3%</span>
+                                        <span class="kpi-sub-value" id="ppKpiMargenBruto">—</span>
                                         <span class="kpi-sub-delta up">↑ 1,5 pts</span>
                                     </div>
                                     <div class="kpi-submetric">
                                         <span class="kpi-sub-label">Margen neto</span>
-                                        <span class="kpi-sub-value">28,5%</span>
+                                        <span class="kpi-sub-value" id="ppKpiMargenNeto">—</span>
                                         <span class="kpi-sub-delta down">↓ 2,1 pts</span>
                                     </div>
                                 </div>
@@ -168,7 +169,7 @@ if($_SESSION['sistema'] !="limonMoreno"){
                         </div>
                     </div>
 
-                    <div class="foot">Vista previa — el selector de fecha todavía no recalcula nada, y los datos de arriba son de ejemplo.</div>
+                    <div class="foot">El selector de fecha ya recalcula los KPIs, gráficos y tablas de arriba. El detalle al hacer click en un comprobante o producto todavía es de ejemplo.</div>
 
                 </div>
 

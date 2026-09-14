@@ -349,7 +349,48 @@ switch($_POST['accion']){
     case 'buscarPrecioVenta':
 	    NEW frenteDeFrentes($_POST['parametros']);
 	    break;
-    
+    case 'obtenerDatosPanelPrincipal':
+        // ESQUELETO temporal para el dashboard "Tablero > Principal" (Claude).
+        // Devuelve datos de prueba con la forma exacta que espera
+        // js/panelPrincipal.js -- reemplazar el cuerpo por las consultas
+        // reales (ventas, rentabilidad, cuentas por cobrar/pagar, stock,
+        // clientes/proveedores con mayor deuda) usando
+        // $_POST['parametros']['fechaDesde'] y ['fechaHasta']. No pasa por
+        // frenteDeFrentes a proposito: es un endpoint aislado, como
+        // avisoPrecios_check.php.
+        header('Content-Type: application/json');
+        $fechaDesde = $_POST['parametros']['fechaDesde'] ?? null;
+        $fechaHasta = $_POST['parametros']['fechaHasta'] ?? null;
+        echo json_encode(array(
+            'soyError' => false,
+            'kpis' => array(
+                'ventas' => 5840000,
+                'gananciaNeta' => 1890000,
+                'margenBruto' => 42.3,
+                'margenNeto' => 28.5,
+                'cuentasPorCobrar' => array('total' => 2360000, 'vencida' => 826000, 'proximaAVencer' => 1062000, 'vigente' => 472000),
+                'cuentasPorPagar'  => array('total' => 4180000, 'vencida' => 752000, 'proximaAVencer' => 2383000, 'vigente' => 1045000)
+            ),
+            'serieVentasGanancia' => array(
+                'meses'    => array('Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep'),
+                'ventas'   => array(3120000,3380000,3610000,3890000,4140000,4400000,4210000,4560000,4890000),
+                'ganancia' => array(890000,970000,1050000,1130000,1210000,1290000,1200000,1340000,1480000)
+            ),
+            'estadoStock' => array('ok' => 64, 'warn' => 27, 'bad' => 9),
+            'clientesConMayorDeuda' => array(
+                array('nombre' => 'Farmacia San Martín', 'total' => 2140000, 'vencida' => 1180000, 'estado' => 'bad'),
+                array('nombre' => 'Distribuidora Sur Dental', 'total' => 1860000, 'vencida' => 640000, 'estado' => 'warn'),
+                array('nombre' => 'Óptica y Ortodoncia Belgrano', 'total' => 1520000, 'vencida' => 0, 'estado' => 'ok')
+            ),
+            'proveedoresConMayorDeuda' => array(
+                array('nombre' => 'Laboratorios Andina S.A.', 'total' => 3120000, 'vencida' => 890000, 'estado' => 'bad'),
+                array('nombre' => 'Insumos Dentales del Plata', 'total' => 2340000, 'vencida' => 0, 'estado' => 'ok'),
+                array('nombre' => 'Quimix Argentina', 'total' => 1780000, 'vencida' => 520000, 'estado' => 'warn')
+            ),
+            '_debug_rango_recibido' => array('fechaDesde' => $fechaDesde, 'fechaHasta' => $fechaHasta)
+        ));
+        exit;
+
 }
 //echo "no entra";
 ?>
