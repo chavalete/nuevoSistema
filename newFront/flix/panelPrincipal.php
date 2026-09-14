@@ -27,7 +27,9 @@ if($_SESSION['sistema'] !="limonMoreno"){
                 tipo         : 'principal'
             };
             var accion_aux = accion;
-            window.urlServices = 'http://<?=$_SERVER['HTTP_HOST']?>/limonMoreno/';
+            // Calculada, no hardcodeada al nombre de carpeta del sitio.
+            // Todavia sin uso real.
+            window.urlServices = 'http://<?=$_SERVER['HTTP_HOST'].dirname(dirname($_SERVER['SCRIPT_NAME']))?>/';
 
             window.allSeccionData = <?=ParseINI::getAllJson();?>;
         </script>
