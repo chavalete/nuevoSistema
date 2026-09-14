@@ -94,6 +94,9 @@ body{
 
 #header .arriba{ height: auto; background: var(--brand-strip-bg); padding: 18px 16px; border-bottom: 1px solid var(--border); }
 #header .arriba #logo{ padding: 0; display: flex; align-items: center; gap: .5rem; }
+/* El logo (311x38) es mas ancho que el sidebar nuevo (252px, ~220px
+   utiles con padding) y queda cortado. Lo reescala sin deformarlo. */
+#header .arriba #logo img{ max-width: 100%; height: auto; }
 #header .arriba #logo span{ font-family: 'Archivo', Arial, sans-serif; font-weight: 700; color: #17212B; font-size: .95rem; }
 #header .arriba #barra-busqueda{ display: none; } /* búsqueda superior retirada del diseño */
 
