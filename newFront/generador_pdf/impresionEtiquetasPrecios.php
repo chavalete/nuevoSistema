@@ -8,10 +8,10 @@
  * lleva un solo tamaño y la cantidad de hojas que haga falta.
  *
  * Parametros (GET):
- *   ids : lista de producto_id separados por coma. Cada id puede llevar
- *         cantidad de copias con ":"  -> ids=12,15:3,20
+ *   ids : lista de producto_id separados por coma (una etiqueta por fila
+ *         de datos_etiquetas)
  *
- * Ej: impresionEtiquetasPrecios.php?ids=12,15:3,20
+ * Ej: impresionEtiquetasPrecios.php?ids=12,15,20
  *
  * La seleccion (que etiquetas se imprimen) esta en obtenerFilasEtiquetas();
  * el armado del PDF en armarPdfEtiquetas().
@@ -322,21 +322,19 @@ function aLatin1($texto) {
 // ---------------------------------------------------------------------------
 // SELECCION
 // Devuelve las filas a imprimir. Cada fila necesita: etiqueta_desc, uxb,
-// tipo_id, producto_pventa, precio_promocion y copias. Aca se puede
+// tipo_id, producto_pventa y precio_promocion. Aca se puede
 // reemplazar la seleccion por ids por pendientes, subfamilia, etc.
 // ---------------------------------------------------------------------------
 function obtenerFilasEtiquetas() {
-    // ids=12,15:3,20  ->  array(12 => 1, 15 => 3, 20 => 1)
-    $copias = array();
+    // ids=12,15,20  ->  array(12, 15, 20)
+    $ids = array();
     foreach (explode(',', isset($_GET['ids']) ? $_GET['ids'] : '') as $item) {
-        $partes = explode(':', trim($item));
-        $id     = (int) $partes[0];
+        $id = (int) $item;
         if ($id > 0) {
-            $n = isset($partes[1]) ? max(1, (int) $partes[1]) : 1;
-            $copias[$id] = (isset($copias[$id]) ? $copias[$id] : 0) + $n;
+            $ids[$id] = $id;
         }
     }
-    if (count($copias) == 0) {
+    if (count($ids) == 0) {
         return array();
     }
 
@@ -348,19 +346,12 @@ function obtenerFilasEtiquetas() {
     $db->addSelect('lp.producto_pventa');
     $db->addSelect('lp.precio_promocion');
     $db->addFrom('datos_etiquetas de LEFT JOIN lista_precios_10 lp ON (lp.producto_id = de.producto_id)');
-    $db->addWhere('de.producto_id IN (' . implode(',', array_keys($copias)) . ')');
+    $db->addWhere('de.producto_id IN (' . implode(',', $ids) . ')');
     $db->addOrderBy('de.etiqueta_desc');
     $db->generarSelect();
     $resultado = $db->ejecutar();
 
-    $filas = array();
-    if (is_array($resultado)) {
-        foreach ($resultado as $fila) {
-            $fila['copias'] = $copias[$fila['producto_id']];
-            $filas[] = $fila;
-        }
-    }
-    return $filas;
+    return is_array($resultado) ? $resultado : array();
 }
 
 // ---------------------------------------------------------------------------
@@ -389,18 +380,14 @@ function prepararEtiqueta($fila, $listas) {
  * de un solo tamaño cada una. Devuelve null si no hay nada para imprimir.
  */
 function armarPdfEtiquetas($filas, $formatos, $listas) {
-    // Agrupar por tamaño (tipo_id), repitiendo las copias
+    // Agrupar por tamaño (tipo_id)
     $porTipo = array();
     foreach ($filas as $fila) {
         $tipo = (int) $fila['tipo_id'];
         if (!isset($formatos[$tipo])) {
             continue;   // tipo_id desconocido: no se imprime
         }
-        $datos  = prepararEtiqueta($fila, $listas);
-        $copias = isset($fila['copias']) ? max(1, (int) $fila['copias']) : 1;
-        for ($c = 0; $c < $copias; $c++) {
-            $porTipo[$tipo][] = $datos;
-        }
+        $porTipo[$tipo][] = prepararEtiqueta($fila, $listas);
     }
     if (count($porTipo) == 0) {
         return null;
