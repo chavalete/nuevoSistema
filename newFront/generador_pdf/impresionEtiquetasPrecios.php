@@ -2,14 +2,21 @@
 /**
  * Impresion de etiquetas de precios en hoja A4.
  *
+ * Una tanda puede mezclar tamaños: el tamaño de cada etiqueta sale de
+ * datos_etiquetas.tipo_id (1 chica, 2 mediana, 3 grande). El PDF sale con
+ * primero las hojas de chicas, despues medianas y despues grandes; cada hoja
+ * lleva un solo tamaño y la cantidad de hojas que haga falta.
+ *
  * Parametros (GET):
- *   tamano : chica | mediana | grande   (default: chica)
- *   ids    : lista de producto_id separados por coma. Cada id puede llevar
- *            cantidad de copias con ":"  -> ids=12,15:3,20
+ *   ids : lista de producto_id separados por coma. Cada id puede llevar
+ *         cantidad de copias con ":"  -> ids=12,15:3,20
  *
- * Ej: impresionEtiquetasPrecios.php?tamano=chica&ids=12,15:3,20
+ * Ej: impresionEtiquetasPrecios.php?ids=12,15:3,20
  *
- * Datos: datos_etiquetas (etiqueta_desc, uxb) + lista_precios_10
+ * La seleccion (que etiquetas se imprimen) esta en obtenerFilasEtiquetas();
+ * el armado del PDF en armarPdfEtiquetas().
+ *
+ * Datos: datos_etiquetas (etiqueta_desc, uxb, tipo_id) + lista_precios_10
  *        (precio_promocion = caja efectivo, producto_pventa = unidad efectivo)
  */
 require_once $_SERVER['DOCUMENT_ROOT'] . '/newFront/libreria/almacenamiento/FrenteAlmacenamiento.php';
@@ -22,11 +29,12 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/newFront/libreria/fpdf/fpdf.php';
 // CONFIGURACION
 // ---------------------------------------------------------------------------
 
-// Medidas de cada formato en mm (ancho x alto)
+// Formatos por datos_etiquetas.tipo_id, en el orden en que salen en el PDF.
+// Medidas en mm (ancho x alto)
 $FORMATOS = array(
-    'chica'   => array('ancho' => 60,  'alto' => 30),
-    'mediana' => array('ancho' => 130, 'alto' => 50),
-    'grande'  => array('ancho' => 297, 'alto' => 210),
+    1 => array('nombre' => 'chica',   'ancho' => 60,  'alto' => 30),
+    2 => array('nombre' => 'mediana', 'ancho' => 130, 'alto' => 50),
+    3 => array('nombre' => 'grande',  'ancho' => 297, 'alto' => 210),
 );
 
 // Hoja A4 y margen que la impresora no llega a imprimir
@@ -312,115 +320,145 @@ function aLatin1($texto) {
 }
 
 // ---------------------------------------------------------------------------
-// PARAMETROS
+// SELECCION
+// Devuelve las filas a imprimir. Cada fila necesita: etiqueta_desc, uxb,
+// tipo_id, producto_pventa, precio_promocion y copias. Aca se puede
+// reemplazar la seleccion por ids por pendientes, subfamilia, etc.
 // ---------------------------------------------------------------------------
-$tamano = isset($_GET['tamano']) ? strtolower($_GET['tamano']) : 'chica';
-if (!isset($FORMATOS[$tamano])) {
-    echo "<h2>Tamaño inválido: " . htmlspecialchars($tamano) . " (chica, mediana o grande)</h2>";
-    exit;
-}
-
-// ids=12,15:3,20  ->  array(array(12,1), array(15,3), array(20,1))
-$pedidos = array();
-$idsUnicos = array();
-foreach (explode(',', isset($_GET['ids']) ? $_GET['ids'] : '') as $item) {
-    $partes = explode(':', trim($item));
-    $id     = (int) $partes[0];
-    $copias = isset($partes[1]) ? max(1, (int) $partes[1]) : 1;
-    if ($id > 0) {
-        $pedidos[] = array($id, $copias);
-        $idsUnicos[$id] = $id;
+function obtenerFilasEtiquetas() {
+    // ids=12,15:3,20  ->  array(12 => 1, 15 => 3, 20 => 1)
+    $copias = array();
+    foreach (explode(',', isset($_GET['ids']) ? $_GET['ids'] : '') as $item) {
+        $partes = explode(':', trim($item));
+        $id     = (int) $partes[0];
+        if ($id > 0) {
+            $n = isset($partes[1]) ? max(1, (int) $partes[1]) : 1;
+            $copias[$id] = (isset($copias[$id]) ? $copias[$id] : 0) + $n;
+        }
     }
-}
-if (count($pedidos) == 0) {
-    echo "<h2>No se indicaron productos (parámetro ids)</h2>";
-    exit;
+    if (count($copias) == 0) {
+        return array();
+    }
+
+    $db = new FrenteAlmacenamiento();
+    $db->addSelect('de.producto_id');
+    $db->addSelect('de.etiqueta_desc');
+    $db->addSelect('de.uxb');
+    $db->addSelect('de.tipo_id');
+    $db->addSelect('lp.producto_pventa');
+    $db->addSelect('lp.precio_promocion');
+    $db->addFrom('datos_etiquetas de LEFT JOIN lista_precios_10 lp ON (lp.producto_id = de.producto_id)');
+    $db->addWhere('de.producto_id IN (' . implode(',', array_keys($copias)) . ')');
+    $db->addOrderBy('de.etiqueta_desc');
+    $db->generarSelect();
+    $resultado = $db->ejecutar();
+
+    $filas = array();
+    if (is_array($resultado)) {
+        foreach ($resultado as $fila) {
+            $fila['copias'] = $copias[$fila['producto_id']];
+            $filas[] = $fila;
+        }
+    }
+    return $filas;
 }
 
 // ---------------------------------------------------------------------------
-// DATOS
+// ARMADO DEL PDF
 // ---------------------------------------------------------------------------
-$db = new FrenteAlmacenamiento();
-$db->addSelect('de.producto_id');
-$db->addSelect('de.etiqueta_desc');
-$db->addSelect('de.uxb');
-$db->addSelect('lp.producto_pventa');
-$db->addSelect('lp.precio_promocion');
-$db->addFrom('datos_etiquetas de LEFT JOIN lista_precios_10 lp ON (lp.producto_id = de.producto_id)');
-$db->addWhere('de.producto_id IN (' . implode(',', $idsUnicos) . ')');
-$db->generarSelect();
-$resultado = $db->ejecutar();
 
-$productos = array();
-if (is_array($resultado)) {
-    foreach ($resultado as $fila) {
-        $productos[$fila['producto_id']] = $fila;
-    }
-}
-if (count($productos) == 0) {
-    echo "<h2>Sin registros en datos_etiquetas para: " . implode(',', $idsUnicos) . "</h2>";
-    exit;
-}
-
-// Armar la lista de etiquetas a imprimir, respetando el orden y las copias
-$etiquetas = array();
-foreach ($pedidos as $p) {
-    if (!isset($productos[$p[0]])) {
-        continue;
-    }
-    $fila   = $productos[$p[0]];
-    $efvo   = calcularPreciosEfectivo($fila);
+// Datos listos para dibujar una etiqueta a partir de una fila de la seleccion
+function prepararEtiqueta($fila, $listas) {
+    $efvo    = calcularPreciosEfectivo($fila);
     $precios = array('caja' => array(), 'unidad' => array());
-    foreach ($LISTAS as $l) {
+    foreach ($listas as $l) {
         $precios['caja'][]   = formatearPrecio(aplicarRecargo($efvo['caja'], $l['recargo']));
         $precios['unidad'][] = formatearPrecio(aplicarRecargo($efvo['unidad'], $l['recargo']));
     }
     $uxb = (is_numeric($fila['uxb']) && $fila['uxb'] > 0) ? (string) (0 + $fila['uxb']) : '-';
 
-    $datos = array(
+    return array(
         'nombre'  => aLatin1($fila['etiqueta_desc']),
         'uxb'     => $uxb,
         'precios' => $precios,
     );
-    for ($c = 0; $c < $p[1]; $c++) {
-        $etiquetas[] = $datos;
-    }
 }
 
-$listasPdf = array();
-foreach ($LISTAS as $l) {
-    $listasPdf[] = array('nombre' => aLatin1($l['nombre']), 'detalle' => aLatin1($l['detalle']));
+/**
+ * Arma el PDF: agrupa por tipo_id y, en el orden de $formatos, llena hojas
+ * de un solo tamaño cada una. Devuelve null si no hay nada para imprimir.
+ */
+function armarPdfEtiquetas($filas, $formatos, $listas) {
+    // Agrupar por tamaño (tipo_id), repitiendo las copias
+    $porTipo = array();
+    foreach ($filas as $fila) {
+        $tipo = (int) $fila['tipo_id'];
+        if (!isset($formatos[$tipo])) {
+            continue;   // tipo_id desconocido: no se imprime
+        }
+        $datos  = prepararEtiqueta($fila, $listas);
+        $copias = isset($fila['copias']) ? max(1, (int) $fila['copias']) : 1;
+        for ($c = 0; $c < $copias; $c++) {
+            $porTipo[$tipo][] = $datos;
+        }
+    }
+    if (count($porTipo) == 0) {
+        return null;
+    }
+
+    $listasPdf = array();
+    foreach ($listas as $l) {
+        $listasPdf[] = array('nombre' => aLatin1($l['nombre']), 'detalle' => aLatin1($l['detalle']));
+    }
+
+    $pdf = new PdfEtiquetas('P', 'mm', 'A4');
+    $pdf->SetAutoPageBreak(false);
+    $pdf->SetMargins(0, 0, 0);
+    $pdf->SetTitle('Etiquetas');
+
+    foreach ($formatos as $tipo => $formato) {
+        if (!isset($porTipo[$tipo])) {
+            continue;
+        }
+        $g = calcularGrilla($formato['ancho'], $formato['alto']);
+
+        // Cada tamaño arranca en hoja nueva
+        foreach ($porTipo[$tipo] as $i => $datos) {
+            $pos = $i % $g['porHoja'];
+            if ($pos == 0) {
+                $pdf->AddPage($g['hoja']);
+            }
+            $col = $pos % $g['cols'];
+            $fil = floor($pos / $g['cols']);
+            $x = $g['x0'] + $col * $g['ocupaW'];
+            $y = $g['y0'] + $fil * $g['ocupaH'];
+
+            if ($g['girada']) {
+                // Se dibuja como si estuviera derecha con esquina en (x, y + ocupaH)
+                // y se rota 90 grados: el texto queda leyendose de abajo hacia arriba.
+                $pdf->Rotar(90, $x, $y + $g['ocupaH']);
+                $pdf->Etiqueta($x, $y + $g['ocupaH'], $g['ancho'], $g['alto'], $datos, $listasPdf);
+                $pdf->Rotar(0);
+            } else {
+                $pdf->Etiqueta($x, $y, $g['ancho'], $g['alto'], $datos, $listasPdf);
+            }
+        }
+    }
+    return $pdf;
 }
 
 // ---------------------------------------------------------------------------
-// IMPRESION
+// MAIN
 // ---------------------------------------------------------------------------
-$g = calcularGrilla($FORMATOS[$tamano]['ancho'], $FORMATOS[$tamano]['alto']);
-
-$pdf = new PdfEtiquetas($g['hoja'], 'mm', 'A4');
-$pdf->SetAutoPageBreak(false);
-$pdf->SetMargins(0, 0, 0);
-$pdf->SetTitle('Etiquetas ' . $tamano);
-
-foreach ($etiquetas as $i => $datos) {
-    $pos = $i % $g['porHoja'];
-    if ($pos == 0) {
-        $pdf->AddPage();
-    }
-    $col = $pos % $g['cols'];
-    $fil = floor($pos / $g['cols']);
-    $x = $g['x0'] + $col * $g['ocupaW'];
-    $y = $g['y0'] + $fil * $g['ocupaH'];
-
-    if ($g['girada']) {
-        // Se dibuja como si estuviera derecha con esquina en (x, y + ocupaH)
-        // y se rota 90 grados: el texto queda leyendose de abajo hacia arriba.
-        $pdf->Rotar(90, $x, $y + $g['ocupaH']);
-        $pdf->Etiqueta($x, $y + $g['ocupaH'], $g['ancho'], $g['alto'], $datos, $listasPdf);
-        $pdf->Rotar(0);
-    } else {
-        $pdf->Etiqueta($x, $y, $g['ancho'], $g['alto'], $datos, $listasPdf);
-    }
+$filas = obtenerFilasEtiquetas();
+if (count($filas) == 0) {
+    echo "<h2>No hay etiquetas para imprimir</h2>";
+    exit;
 }
 
-$pdf->Output('etiquetas_' . $tamano . '.pdf', 'I');
+$pdf = armarPdfEtiquetas($filas, $FORMATOS, $LISTAS);
+if ($pdf === null) {
+    echo "<h2>Las etiquetas seleccionadas no tienen un tipo_id válido (1 chica, 2 mediana, 3 grande)</h2>";
+    exit;
+}
+$pdf->Output('etiquetas.pdf', 'I');
