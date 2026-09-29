@@ -26,7 +26,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/newFront/libreria/fpdf/fpdf.php';
 $FORMATOS = array(
     'chica'   => array('ancho' => 60,  'alto' => 30),
     'mediana' => array('ancho' => 130, 'alto' => 50),
-    'grande'  => array('ancho' => 210, 'alto' => 297),
+    'grande'  => array('ancho' => 297, 'alto' => 210),
 );
 
 // Hoja A4 y margen que la impresora no llega a imprimir
@@ -259,41 +259,49 @@ class PdfEtiquetas extends FPDF
 }
 
 /**
- * Calcula como acomodar las etiquetas en la hoja para que entren la mayor
- * cantidad posible: prueba derecha y girada y se queda con la que mas entra.
- * Si la etiqueta no entra en el area imprimible, se achica hasta entrar.
+ * Calcula como acomodar las etiquetas para que entren la mayor cantidad
+ * posible por hoja: prueba la hoja vertical y apaisada, con la etiqueta
+ * derecha y girada, y se queda con la que mas entra (a igualdad, la que no
+ * gira la etiqueta). Si la etiqueta no entra en el area imprimible, se
+ * achica hasta entrar, usando la hoja con la misma orientacion que la etiqueta.
  */
 function calcularGrilla($ancho, $alto) {
-    $utilW = HOJA_ANCHO - 2 * HOJA_MARGEN;
-    $utilH = HOJA_ALTO - 2 * HOJA_MARGEN;
+    $hojas = array(
+        'P' => array(HOJA_ANCHO, HOJA_ALTO),
+        'L' => array(HOJA_ALTO, HOJA_ANCHO),
+    );
 
-    $opciones = array();
+    $g = null;
     foreach (array(false, true) as $girada) {
-        $w = $girada ? $alto : $ancho;   // lo que ocupa en la hoja
-        $h = $girada ? $ancho : $alto;
-        $cols = floor($utilW / $w);
-        $rows = floor($utilH / $h);
-        $opciones[] = array('girada' => $girada, 'cols' => $cols, 'filas' => $rows,
-                            'ancho' => $ancho, 'alto' => $alto);
+        foreach ($hojas as $orient => $hoja) {
+            $w = $girada ? $alto : $ancho;   // lo que ocupa en la hoja
+            $h = $girada ? $ancho : $alto;
+            $cols  = floor(($hoja[0] - 2 * HOJA_MARGEN) / $w);
+            $filas = floor(($hoja[1] - 2 * HOJA_MARGEN) / $h);
+            if ($g === null || $cols * $filas > $g['cols'] * $g['filas']) {
+                $g = array('hoja' => $orient, 'girada' => $girada, 'cols' => $cols,
+                           'filas' => $filas, 'ancho' => $ancho, 'alto' => $alto);
+            }
+        }
     }
-    usort($opciones, function ($a, $b) {
-        return ($b['cols'] * $b['filas']) - ($a['cols'] * $a['filas']);
-    });
-    $g = $opciones[0];
 
     // No entra ninguna (ej: grande = A4 completa): se escala al area imprimible
     if ($g['cols'] * $g['filas'] == 0) {
-        $g = array('girada' => false, 'cols' => 1, 'filas' => 1,
+        $orient = $ancho > $alto ? 'L' : 'P';
+        $utilW  = $hojas[$orient][0] - 2 * HOJA_MARGEN;
+        $utilH  = $hojas[$orient][1] - 2 * HOJA_MARGEN;
+        $g = array('hoja' => $orient, 'girada' => false, 'cols' => 1, 'filas' => 1,
                    'ancho' => min($ancho, $utilW), 'alto' => min($alto, $utilH));
     }
 
     // Grilla centrada en la hoja
+    $hoja   = $hojas[$g['hoja']];
     $ocupaW = $g['girada'] ? $g['alto'] : $g['ancho'];
     $ocupaH = $g['girada'] ? $g['ancho'] : $g['alto'];
-    $g['ocupaW'] = $ocupaW;
-    $g['ocupaH'] = $ocupaH;
-    $g['x0'] = (HOJA_ANCHO - $g['cols'] * $ocupaW) / 2;
-    $g['y0'] = (HOJA_ALTO - $g['filas'] * $ocupaH) / 2;
+    $g['ocupaW']  = $ocupaW;
+    $g['ocupaH']  = $ocupaH;
+    $g['x0']      = ($hoja[0] - $g['cols'] * $ocupaW) / 2;
+    $g['y0']      = ($hoja[1] - $g['filas'] * $ocupaH) / 2;
     $g['porHoja'] = $g['cols'] * $g['filas'];
     return $g;
 }
@@ -389,7 +397,7 @@ foreach ($LISTAS as $l) {
 // ---------------------------------------------------------------------------
 $g = calcularGrilla($FORMATOS[$tamano]['ancho'], $FORMATOS[$tamano]['alto']);
 
-$pdf = new PdfEtiquetas('P', 'mm', 'A4');
+$pdf = new PdfEtiquetas($g['hoja'], 'mm', 'A4');
 $pdf->SetAutoPageBreak(false);
 $pdf->SetMargins(0, 0, 0);
 $pdf->SetTitle('Etiquetas ' . $tamano);
