@@ -151,7 +151,7 @@
     // Calcula el saldo restante (redondeado a centavos) y lo carga en el importe
     var actualizarSaldo = function(){
         var saldo = Math.round((window.totalFactura - sumaPagos()) * 100) / 100;
-        $('input[name=importe]').val(saldo > 0 ? saldo.toFixed(2) : '');
+        $('input[name=importe]', 'div#modal.inicio form.modal').val(saldo > 0 ? saldo.toFixed(2) : '');
     }
 
     var showSecundary = function(){
@@ -163,7 +163,7 @@
         var trClass = 'detalles-dato-blue';
         var trClassResumen = 'detalles-dato-blue';
         var tdForma = '<td params="'+$('select[name=formas]').val()+'">'+$('select[name=formas]').val()+'</td>';
-        var tdImp = '<td params="'+$('input[name=importe]').val()+'">'+$('input[name=importe]').val()+'</td>';
+        var tdImp = '<td params="'+$('input[name=importe]', 'div#modal.inicio form.modal').val()+'">'+$('input[name=importe]', 'div#modal.inicio form.modal').val()+'</td>';
         var tdSupr = '<td class="eliminar"><div class="eliminar" title="Quitar"></div></td>';
         var tr;
         var trResumen;
