@@ -46,10 +46,7 @@
                                             <td class="field-input"><input type="text" name="importe" class="parcial required"/></td>
                                             <td class="addButton"></td>
                                         </tr>
-                                        <tr>
-                                            <td class="field-name"><span class="field-name">Saldo restante</span></td>
-                                            <td class="field-input"><span class="saldoRestante">0.00</span></td>
-                                        </tr>
+                                        
                                     </table>
                                 <td>
                             </tr>
@@ -151,10 +148,9 @@
         });
         return suma;
     }
-    // Calcula el saldo restante (redondeado a centavos) y lo muestra
+    // Calcula el saldo restante (redondeado a centavos) y lo carga en el importe
     var actualizarSaldo = function(){
         var saldo = Math.round((window.totalFactura - sumaPagos()) * 100) / 100;
-        $('span.saldoRestante').html(saldo.toFixed(2));
         $('input[name=importe]').val(saldo > 0 ? saldo.toFixed(2) : '');
     }
 
