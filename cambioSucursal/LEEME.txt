@@ -1,0 +1,35 @@
+CAMBIO DE SUCURSAL SIN VOLVER A LOGUEARSE
+=========================================
+
+Son 2 archivos nuevos + 1 pegado. No se toca nada mas del sistema.
+
+1) COPIAR (archivos nuevos)
+   flix/cambiarSucursal.php      ->  <sistema>/flix/cambiarSucursal.php
+   flix/inc/cambioSucursal.php   ->  <sistema>/flix/inc/cambioSucursal.php
+
+2) PEGAR en <sistema>/flix/tpl/header.php
+   El contenido de PEGAR_EN_header.php va justo DESPUES de este bloque:
+
+       <p class="logout-usuario flotar-derecha">
+           <?php echo $_SESSION['usuarioNombre']; ?>
+       </p>
+
+3) HABILITAR USUARIOS
+   Editar <sistema>/flix/inc/cambioSucursal.php y poner los usuario_id
+   en $USUARIOS_CAMBIO_SUCURSAL, por ejemplo:  array(1, 5, 12);
+   Para ver los ids:  SELECT usuario_id, usuario_nombre FROM datos_usuarios;
+
+COMO FUNCIONA
+- Solo los usuarios de la lista ven un combo MORENO / ROSAS / LIMONETA
+  al lado de su nombre, arriba a la derecha.
+- Al elegir una sucursal se cambia la sesion y se recargan los permisos
+  de esa sucursal, igual que en el login.
+- Solo deja pasar a una sucursal donde el usuario este dado de alta
+  (tabla usuarios_sucursales). Si no, no hace nada.
+- Si alguien que no esta en la lista llama a cambiarSucursal.php a mano,
+  no hace nada.
+
+REQUISITOS
+- PHP 5.3 o superior.
+- Que exista <sistema>/usuarios/FrenteUsuarios.php (la carpeta usuarios
+  al lado de flix), como en el sistema actual.
